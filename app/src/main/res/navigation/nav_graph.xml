@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/notes_fragment">
+
+    <fragment
+        android:id="@+id/notes_fragment"
+        android:label="notes_fragment"
+        tools:layout="@layout/notes_fragment" />
+    <fragment
+        android:id="@+id/editor_note_fragment"
+        android:name="com.example.pp.activity.fragment.drawer.OrderPhoneFragment"
+        android:label="editor_note_fragment"
+        tools:layout="@layout/editor_note_fragment" />
+
+</navigation>
