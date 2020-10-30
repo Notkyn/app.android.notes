@@ -29,21 +29,38 @@ android {
 }
 
 dependencies {
+    /* Version */
+    def androidX = "1.3.2"
+    def androidX_legacy = "1.0.0"
+    def androidX_lifecycle = "2.2.0"
+    def androidX_appcompat = "1.2.0"
+    def androidX_recyclerview = "1.1.0"
+    def androidX_constraintlayout = "2.0.3"
+    def androidX_navigation = "2.3.1"
+    def material = "1.2.1"
+    def junit = "4.13.1"
+    def androidX_test_junit = "1.1.2"
+    def androidX_test_runner = "1.3.0"
+    def androidX_test_espresso = "3.3.0"
+
     /* AndroidX */
-    implementation 'androidx.core:core:1.3.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
-    implementation 'androidx.navigation:navigation-fragment:2.3.1'
-    implementation 'androidx.navigation:navigation-ui:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.core:core:$androidX"
+    implementation "androidx.legacy:legacy-support-v4:$androidX_legacy"
+    implementation "androidx.legacy:legacy-support-core-utils:$androidX_legacy"
+    implementation "androidx.lifecycle:lifecycle-extensions:$androidX_lifecycle"
+    implementation "androidx.appcompat:appcompat:$androidX_appcompat"
+    implementation "androidx.recyclerview:recyclerview:$androidX_recyclerview"
+    implementation "androidx.constraintlayout:constraintlayout:$androidX_constraintlayout"
+    implementation "androidx.navigation:navigation-fragment:$androidX_navigation"
+    implementation "androidx.navigation:navigation-ui:$androidX_navigation"
+
+    /* Material */
+    implementation "com.google.android.material:material:$material"
 
     /* jUnit and Testing*/
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation "junit:junit:$junit"
+    androidTestImplementation "androidx.test.ext:junit:$androidX_test_junit"
+    androidTestImplementation "androidx.test:runner:$androidX_test_runner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidX_test_espresso"
+    androidTestImplementation "android.arch.navigation:navigation-testing:$androidX_navigation"
 }

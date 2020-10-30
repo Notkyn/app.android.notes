@@ -10,4 +10,10 @@
         android:layout_height="wrap_content"
         android:text="Notes!"/>
 
+    <Button
+        android:id="@+id/go_editor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Editor!"/>
+
 </LinearLayout>

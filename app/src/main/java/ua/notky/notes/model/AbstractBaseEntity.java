@@ -1,0 +1,47 @@
+package ua.notky.notes.model;
+
+import java.util.Objects;
+
+public class AbstractBaseEntity {
+    private Long id;
+
+    public AbstractBaseEntity() {
+    }
+
+    public AbstractBaseEntity(Long id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
+        return getId() == null;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
+
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": " + id;
+    }
+}
