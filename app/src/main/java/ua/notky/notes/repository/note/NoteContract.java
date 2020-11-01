@@ -15,7 +15,7 @@ public class NoteContract {
 
     public static String SQL_CREATE_TABLE = "CREATE TABLE "
             + TABLE_NAME + " ("
-            + _ID + " LONG PRIMARY KEY AUTOINCREMENT, "
+            + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TITLE + " TEXT NOT NULL DEFAULT 0, "
             + DESCRIPTION + " TEXT NULL DEFAULT 0, "
             + DATE + " LONG NOT NULL DEFAULT 0);";

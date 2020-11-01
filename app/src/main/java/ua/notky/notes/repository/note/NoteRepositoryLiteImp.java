@@ -35,16 +35,16 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
 
         db.close();
 
-        note.setId(id);
+        note.setId((int) id);
 
         return note;
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean delete(int id) {
         db = helper.getWritableDatabase();
 
-        int result = db.delete(TABLE_NAME, _ID, new String[]{String.valueOf(id)});
+        int result = db.delete(TABLE_NAME, _ID + " = ?", new String[]{String.valueOf(id)});
 
         db.close();
 
@@ -52,7 +52,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
     }
 
     @Override
-    public Note get(long id) {
+    public Note get(int id) {
         db = helper.getReadableDatabase();
 
         try(Cursor cursor = db.query(TABLE_NAME,
@@ -69,7 +69,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
 
             while (cursor.moveToNext()){
 
-                long currentId = cursor.getInt(indexId);
+                int currentId = cursor.getInt(indexId);
                 if(currentId == id){
                     Note note = new Note(currentId);
                     note.setTitle(cursor.getString(indexTitle));
@@ -121,7 +121,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
             int indexDate = cursor.getColumnIndex(DATE);
 
             while (cursor.moveToNext()) {
-                Note note = new Note(cursor.getLong(indexId));
+                Note note = new Note(cursor.getInt(indexId));
                 note.setTitle(cursor.getString(indexTitle));
                 note.setDescription(cursor.getString(indexDescription));
                 note.setDate(new Date(cursor.getLong(indexDate)));

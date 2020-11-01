@@ -3,12 +3,12 @@ package ua.notky.notes.model;
 import java.util.Objects;
 
 public class AbstractBaseEntity {
-    private Long id;
+    private Integer id;
 
     public AbstractBaseEntity() {
     }
 
-    public AbstractBaseEntity(Long id) {
+    public AbstractBaseEntity(Integer id) {
         this.id = id;
     }
 
@@ -16,11 +16,11 @@ public class AbstractBaseEntity {
         return getId() == null;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

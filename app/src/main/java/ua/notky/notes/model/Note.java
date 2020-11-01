@@ -3,7 +3,7 @@ package ua.notky.notes.model;
 import java.util.Date;
 import java.util.Objects;
 
-public class Note extends AbstractBaseEntity{
+public class Note extends AbstractBaseEntity implements Comparable<Note>{
     private String title;
     private String description;
     private Date date;
@@ -12,8 +12,14 @@ public class Note extends AbstractBaseEntity{
     public Note() {
     }
 
-    public Note(Long id) {
+    public Note(Integer id) {
         super(id);
+    }
+
+    public Note(String title, String description, Date date) {
+        this.title = title;
+        this.description = description;
+        this.date = date;
     }
 
     @Override
@@ -66,5 +72,10 @@ public class Note extends AbstractBaseEntity{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(Note note) {
+        return title.compareTo(note.getTitle());
     }
 }

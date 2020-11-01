@@ -6,9 +6,9 @@ import ua.notky.notes.model.Note;
 
 public interface NoteService {
     Note save(Note note);
-    void delete(long id);
-    Note get(long id);
+    void delete(int id);
+    Note get(int id);
     Note update(Note note);
     List<Note> getAll();
-    List<Note> saveAll(List<Note> list);
+    void saveAll(List<Note> list);
 }

@@ -6,8 +6,8 @@ import ua.notky.notes.model.Note;
 
 public interface NoteRepositoryLite {
     Note save(Note note);
-    boolean delete(long id);
-    Note get(long id);
+    boolean delete(int id);
+    Note get(int id);
     Note update(Note note);
     List<Note> getAll();
 }

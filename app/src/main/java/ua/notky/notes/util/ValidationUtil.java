@@ -4,7 +4,7 @@ import ua.notky.notes.model.AbstractBaseEntity;
 import ua.notky.notes.util.exception.IllegalEntityException;
 import ua.notky.notes.util.exception.NotFoundDataException;
 
-public class Validation {
+public class ValidationUtil {
     public static <T extends AbstractBaseEntity> void checkNotNull(T object){
         if (object == null)
             throw new AssertionError("Object cannot be null");
@@ -22,7 +22,7 @@ public class Validation {
         }
     }
 
-    public static <T> T checkNotFoundWithId(T object, long id) {
+    public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);
     }
 
