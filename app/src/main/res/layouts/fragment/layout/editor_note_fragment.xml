@@ -2,18 +2,34 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/match_match"
     android:id="@+id/editor_note_fragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Editor!"/>
+    <ScrollView
+        style="@style/match_match">
 
-    <Button
-        android:id="@+id/go_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to List"/>
+        <LinearLayout
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            style="@style/match_wrap">
+
+            <EditText
+                android:id="@+id/title_edit_view"
+                android:inputType="textMultiLine"
+                style="@style/edit_title"
+                android:hint="@string/title_edit_hint"
+                android:autofillHints="@string/title_edit_hint"/>
+
+            <TextView
+                style="@style/underline"/>
+
+            <EditText
+                android:id="@+id/description_edit_view"
+                android:inputType="textMultiLine"
+                style="@style/edit_description"
+                android:hint="@string/description_edit_hint"
+                android:autofillHints="@string/description_edit_hint" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

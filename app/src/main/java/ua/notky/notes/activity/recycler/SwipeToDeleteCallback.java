@@ -32,4 +32,6 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         notes.remove(position);
         adapter.notifyDataSetChanged();
     }
+
+
 }

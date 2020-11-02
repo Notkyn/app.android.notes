@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="fab_text">plus</string>
+    <string name="title_edit_hint">Введите заголовок…</string>
+    <string name="description_edit_hint">Добавить описание…</string>
 </resources>
