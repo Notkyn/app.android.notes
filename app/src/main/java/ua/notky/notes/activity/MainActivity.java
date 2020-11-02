@@ -29,4 +29,10 @@ public class MainActivity extends AppCompatActivity{
             noteService.saveAll(getDefaulData());
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }
