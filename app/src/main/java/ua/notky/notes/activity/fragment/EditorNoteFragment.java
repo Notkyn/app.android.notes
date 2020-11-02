@@ -48,10 +48,15 @@ public class EditorNoteFragment extends Fragment{
     }
 
     private Note getNoteFromArguments(Bundle bundle){
+        if(bundle == null){
+            return new Note();
+        }
         Note note = new Note();
         note.setId(bundle.getInt(ID));
         note.setTitle(bundle.getString(TITLE));
         note.setDescription(bundle.getString(DESCRIPTION));
         return note;
     }
+
+
 }

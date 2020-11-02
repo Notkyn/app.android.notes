@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#ffff99</color>
-    <color name="purple_500">#ffff99</color>
-    <color name="purple_700">#ffff99</color>
-    <color name="teal_200">#ffcc99</color>
-    <color name="teal_700">#ffcc99</color>
+    <color name="colorPrimary">#ffff99</color>
+    <color name="colorPrimaryVariant">#ffffcc</color>
+    <color name="colorSecondary">#ffcc99</color>
+    <color name="colorSecondaryVariant">#ffcc99</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#999999</color>
-
-    <color name="main_fon">#ffff99</color>
-    <color name="item_fon">#ffffcc</color>
 </resources>

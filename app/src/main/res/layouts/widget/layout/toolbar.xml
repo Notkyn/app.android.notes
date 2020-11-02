@@ -4,4 +4,12 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/main_fon" />
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:id="@+id/text_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List Notes"/>
+
+</androidx.appcompat.widget.Toolbar>

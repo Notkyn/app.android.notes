@@ -46,7 +46,7 @@ dependencies {
     def androidX_lifecycle = "2.2.0"
     def androidX_appcompat = "1.2.0"
     def androidX_recyclerview = "1.1.0"
-    def androidX_constraintlayout = "2.0.3"
+    def androidX_constraintlayout = "2.0.4"
     def androidX_navigation = "2.3.1"
     def material = "1.2.1"
     def junit = "4.13.1"
@@ -73,5 +73,5 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidX_test_junit"
     androidTestImplementation "androidx.test:runner:$androidX_test_runner"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidX_test_espresso"
-    androidTestImplementation "android.arch.navigation:navigation-testing:$androidX_navigation"
+    androidTestImplementation "androidx.navigation:navigation-testing:$androidX_navigation"
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
@@ -70,6 +71,9 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         bundle.putString(TITLE, note.getTitle());
         bundle.putString(DESCRIPTION, note.getDescription());
         navController.navigate(R.id.editor_note_fragment, bundle);
+
+        TextView textView = getActivity().findViewById(R.id.text_toolbar);
+        textView.setVisibility(View.INVISIBLE);
     }
 
     @Override
