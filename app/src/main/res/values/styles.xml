@@ -33,18 +33,19 @@
 
     <style name="item.text.title">
         <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="item.text.description">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
-    <style name="item.text.data">
+    <style name="item.text.date">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:gravity">end</item>
+        <item name="android:textColor">@color/colorSecondaryVariant</item>
     </style>
 
     <style name="edit_text" parent="match_wrap">

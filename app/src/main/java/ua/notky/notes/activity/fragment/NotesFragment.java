@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
+import ua.notky.notes.activity.listener.OnSelectItemToEditListener;
 import ua.notky.notes.activity.recycler.NoteAdapter;
 import ua.notky.notes.activity.recycler.OnSelectItemRecyclerView;
 import ua.notky.notes.activity.recycler.SwipeToDeleteCallback;
@@ -30,6 +31,7 @@ import static ua.notky.notes.util.NoteUtil.TITLE;
 
 public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<Note>, View.OnClickListener {
     private NavController navController;
+    private OnSelectItemToEditListener toEditListener;
     private NoteService noteService;
     private RecyclerView recyclerView;
     private List<Note> notes;
@@ -46,6 +48,7 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         view.findViewById(R.id.fab).setOnClickListener(this);
 
         navController = NavHostFragment.findNavController(this);
+        toEditListener = (OnSelectItemToEditListener) getActivity();
 
         noteService = new NoteServiceImp(view.getContext());
         notes = noteService.getAll();
@@ -70,10 +73,8 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         bundle.putInt(ID, note.getId());
         bundle.putString(TITLE, note.getTitle());
         bundle.putString(DESCRIPTION, note.getDescription());
+        toEditListener.onSelectItemToEdit();
         navController.navigate(R.id.editor_note_fragment, bundle);
-
-        TextView textView = getActivity().findViewById(R.id.text_toolbar);
-        textView.setVisibility(View.INVISIBLE);
     }
 
     @Override

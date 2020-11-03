@@ -95,7 +95,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
         values.put(DESCRIPTION, note.getDescription());
         values.put(DATE, note.getDate().getTime());
 
-        db.update(TABLE_NAME, values, _ID, new String[]{String.valueOf(note.getId())});
+        db.update(TABLE_NAME, values, _ID + " = ?", new String[]{String.valueOf(note.getId())});
 
         db.close();
 

@@ -13,14 +13,14 @@
     style="@style/item">
 
     <TextView
+        android:id="@+id/date_note_item"
+        style="@style/item.text.date"/>
+    <TextView
         android:id="@+id/title_note_item"
-        style="@style/item.text.title"/>
+        style="@style/item.text.title"
+        android:layout_marginTop="5dp"/>
     <TextView
         android:id="@+id/description_note_item"
         android:layout_marginTop="5dp"
         style="@style/item.text.description"/>
-    <TextView
-        android:id="@+id/date_note_item"
-        android:layout_marginTop="5dp"
-        style="@style/item.text.data"/>
 </LinearLayout>
