@@ -10,10 +10,10 @@ import java.util.Date;
 
 import androidx.fragment.app.Fragment;
 import ua.notky.notes.R;
-import ua.notky.notes.activity.listener.HostActivity;
-import ua.notky.notes.activity.listener.OnChangeTextListener;
-import ua.notky.notes.activity.listener.OnSaveToolbarButtonListener;
-import ua.notky.notes.activity.listener.TextEditListener;
+import ua.notky.notes.listener.HostActivity;
+import ua.notky.notes.listener.OnChangeTextListener;
+import ua.notky.notes.listener.OnSaveToolbarButtonListener;
+import ua.notky.notes.listener.TextEditListener;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.service.NoteServiceImp;

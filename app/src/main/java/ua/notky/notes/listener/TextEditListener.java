@@ -1,4 +1,4 @@
-package ua.notky.notes.activity.listener;
+package ua.notky.notes.listener;
 
 import android.text.Editable;
 import android.text.TextWatcher;

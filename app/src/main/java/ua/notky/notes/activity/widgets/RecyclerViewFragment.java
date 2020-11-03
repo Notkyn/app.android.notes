@@ -1,4 +1,4 @@
-package ua.notky.notes.activity.fragment;
+package ua.notky.notes.activity.widgets;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

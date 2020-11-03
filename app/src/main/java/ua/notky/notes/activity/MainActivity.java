@@ -1,15 +1,18 @@
 package ua.notky.notes.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import ua.notky.notes.R;
-import ua.notky.notes.activity.fragment.EditorNoteFragment;
-import ua.notky.notes.activity.listener.HostActivity;
-import ua.notky.notes.activity.listener.OnChangeTextListener;
-import ua.notky.notes.activity.listener.OnSaveToolbarButtonListener;
-import ua.notky.notes.activity.listener.OnSelectItemToEditListener;
+import ua.notky.notes.activity.widgets.ProgressBarDialog;
+import ua.notky.notes.activity.widgets.SaveFragment;
+import ua.notky.notes.listener.HostActivity;
+import ua.notky.notes.listener.OnChangeTextListener;
+import ua.notky.notes.listener.OnSaveToolbarButtonListener;
+import ua.notky.notes.listener.OnSelectItemToEditListener;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.service.NoteServiceImp;
+import ua.notky.notes.tasks.FirstLoadTask;
 import ua.notky.notes.util.enums.Mode;
 import ua.notky.notes.util.enums.TextState;
 
@@ -27,8 +30,9 @@ import static ua.notky.notes.util.DefaultDataUtil.getDefaulData;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSelectItemToEditListener,
         OnChangeTextListener, HostActivity {
     private NoteService noteService;
+    private FirstLoadTask firstLoadTask;
+    SaveFragment saveFragment;
     private OnSaveToolbarButtonListener onSaveToolbarButtonListener;
-    private EditorNoteFragment editorNoteFragment;
     private Button backBtn;
     private Button saveBtn;
     private TextView searchView;
@@ -37,6 +41,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        saveFragment = (SaveFragment) getSupportFragmentManager().findFragmentByTag("SAVE_FRAGMENT");
+
+        if (saveFragment == null) {
+            saveFragment = new SaveFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(saveFragment, "SAVE_FRAGMENT")
+                    .commit();
+        }
+
+
+        firstStart();
+        System.out.println("CREATED");
         Toolbar toolbar = findViewById(R.id.toolbar);
         backBtn = toolbar.findViewById(R.id.back_toolbar_btn);
         backBtn.setOnClickListener(this);
@@ -122,5 +138,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onSaveToolbar(){
         onSaveToolbarButtonListener.onSave();
         startMode(Mode.EDIT);
+    }
+
+    private void firstStart(){
+        System.out.println(getLastNonConfigurationInstance());
+        if(getLastNonConfigurationInstance() == null){
+            firstLoadTask = new FirstLoadTask(getSupportFragmentManager());
+            firstLoadTask.execute();
+        }
+    }
+
+    @Nullable
+    @Override
+    public Object getLastNonConfigurationInstance() {
+        return firstLoadTask;
     }
 }

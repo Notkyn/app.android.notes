@@ -1,4 +1,4 @@
-package ua.notky.notes.activity.listener;
+package ua.notky.notes.listener;
 
 import ua.notky.notes.util.enums.TextState;
 

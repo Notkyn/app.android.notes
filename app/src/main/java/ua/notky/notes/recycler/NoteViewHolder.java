@@ -1,4 +1,4 @@
-package ua.notky.notes.activity.recycler;
+package ua.notky.notes.recycler;
 
 import android.view.View;
 import android.widget.TextView;

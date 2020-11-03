@@ -1,4 +1,4 @@
-package ua.notky.notes.activity.recycler;
+package ua.notky.notes.recycler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
