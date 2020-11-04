@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/notes_fragment"
-        android:name="ua.notky.notes.activity.fragment.NotesFragment"
+        android:name="ua.notky.notes.gui.fragment.NotesFragment"
         android:label="notes_fragment"
         tools:layout="@layout/notes_fragment" >
     </fragment>
     <fragment
         android:id="@+id/editor_note_fragment"
-        android:name="ua.notky.notes.activity.fragment.EditorNoteFragment"
+        android:name="ua.notky.notes.gui.fragment.EditorNoteFragment"
         android:label="editor_note_fragment"
         tools:layout="@layout/editor_note_fragment" />
 

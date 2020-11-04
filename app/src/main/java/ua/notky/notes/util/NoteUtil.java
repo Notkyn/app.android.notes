@@ -3,7 +3,7 @@ package ua.notky.notes.util;
 import java.util.Collections;
 import java.util.List;
 
-import ua.notky.notes.model.Note;
+import ua.notky.notes.data.model.Note;
 
 public class NoteUtil {
     public static final String ID = "id";
