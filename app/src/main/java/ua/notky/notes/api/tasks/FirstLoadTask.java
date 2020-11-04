@@ -1,10 +1,12 @@
 package ua.notky.notes.api.tasks;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import java.util.concurrent.TimeUnit;
 
 import ua.notky.notes.gui.listener.FirstLaunch;
+import ua.notky.notes.util.PreferencesConstant;
 import ua.notky.notes.util.enums.LaunchState;
 
 public class FirstLoadTask extends AsyncTask<Void, Void, Void> {
