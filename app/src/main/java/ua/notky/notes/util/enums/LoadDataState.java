@@ -1,6 +1,6 @@
 package ua.notky.notes.util.enums;
 
-public enum LaunchState {
+public enum LoadDataState {
     START,
     STOP
 }

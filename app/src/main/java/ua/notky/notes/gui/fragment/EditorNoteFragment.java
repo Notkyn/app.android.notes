@@ -53,7 +53,9 @@ public class EditorNoteFragment extends Fragment implements OnSaveToolbarButtonL
         descriptionEdit.setText(note.getDescription());
 
         HostActivity activity = (HostActivity) getActivity();
-        activity.setSaveToolbarListener(this);
+        if(activity != null){
+            activity.setSaveToolbarListener(this);
+        }
 
         return view;
     }

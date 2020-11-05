@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
+import ua.notky.notes.gui.listener.HostActivity;
 import ua.notky.notes.gui.listener.OnSelectItemToEditListener;
 import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.gui.recycler.OnSelectItemRecyclerView;
@@ -22,6 +23,7 @@ import ua.notky.notes.data.model.Note;
 import ua.notky.notes.data.service.NoteService;
 import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.util.NoteUtil;
+import ua.notky.notes.util.PrintHelper;
 import ua.notky.notes.util.RecyclerUtil;
 
 import static ua.notky.notes.util.NoteUtil.DESCRIPTION;
@@ -32,7 +34,7 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
     private NavController navController;
     private OnSelectItemToEditListener toEditListener;
     private NoteService noteService;
-    private RecyclerView recyclerView;
+    private NoteAdapter adapter;
     private List<Note> notes;
 
     @Override
@@ -53,15 +55,22 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         notes = noteService.getAll();
         NoteUtil.sortWithDate(notes);
 
-
-        recyclerView = RecyclerUtil.createRecycler(view);
-        NoteAdapter adapter = new NoteAdapter(this.getContext(), notes, this);
+        HostActivity activity = (HostActivity) getActivity();
+        if(activity != null){
+            adapter = activity.getAdapter();
+            adapter.setContext(this.getContext());
+            adapter.setList(notes);
+            adapter.setOnSelectItemRecyclerView(this);
+        }
+        RecyclerView recyclerView = RecyclerUtil.createRecycler(view);
         recyclerView.setAdapter(adapter);
 
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, adapter, notes, noteService);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
 
         return view;
     }
@@ -91,6 +100,6 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         noteService.save(note);
 
         notes.add(0, note);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

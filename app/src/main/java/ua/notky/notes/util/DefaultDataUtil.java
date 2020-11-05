@@ -14,24 +14,11 @@ public class DefaultDataUtil {
         List<Note> list = new ArrayList<>();
 
         list.add(new Note("Note 1", "Description Note 1 ",
-                getTime(2019, 4, 2, 4, 50, 43)));
+                getTime(2019, 4, 2, 3, 51, 42)));
         list.add(new Note("Note 2",
-                "Description Note 2 Wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-                getTime(2020, 3, 2, 4, 50, 43)));
-        list.add(new Note("Note 3  " +
-                "titletitletitletitletitletitletitle", "Description Note 3",
-                getTime(2020, 2, 2, 4, 50, 43)));
-        list.add(new Note("Note 4 titletitletitletitletitletitletitleitletitleitletitle",
-                "Description Note 4 DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription",
-                new Date()));
-        list.add(new Note("Note 5", "Description Note 5", new Date()));
-        list.add(new Note("Note 6", "Description Note 6",
-                getTime(2020, 5, 2, 4, 50, 43)));
-        list.add(new Note("Note 7", "Description Note 7", new Date()));
-        list.add(new Note("Note 8", "Description Note 8", new Date()));
-        list.add(new Note("Note 9", "Description Note 9", new Date()));
-        list.add(new Note("Note 10", "Description Note 10",
-                getTime(2010, 11, 1, 5, 31, 3)));
+                "Description Note 2 ",
+                getTime(2020, 3, 3, 4, 52, 43)));
+        list.add(new Note("Note 3", "Description Note 3", new Date()));
 
         return list;
     }

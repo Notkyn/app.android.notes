@@ -4,10 +4,10 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import ua.notky.notes.api.tasks.FirstLoadTask;
-import ua.notky.notes.gui.widgets.ProgressBarDialog;
+import ua.notky.notes.api.tasks.LoadTask;
 
 public class SavedFragment extends Fragment {
+    private LoadTask loadTask;
 
 
     @Override
@@ -16,4 +16,11 @@ public class SavedFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    public LoadTask getLoadTask() {
+        return loadTask;
+    }
+
+    public void setLoadTask(LoadTask loadTask) {
+        this.loadTask = loadTask;
+    }
 }

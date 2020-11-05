@@ -41,7 +41,7 @@ android {
 
 dependencies {
     /* Version */
-    def androidX = "1.3.2"
+    def androidX = "1.4.0-alpha01"
     def androidX_legacy = "1.0.0"
     def androidX_lifecycle = "2.2.0"
     def androidX_appcompat = "1.2.0"

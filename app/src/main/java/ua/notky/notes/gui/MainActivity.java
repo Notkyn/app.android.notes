@@ -3,20 +3,20 @@ package ua.notky.notes.gui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import ua.notky.notes.R;
 import ua.notky.notes.gui.fragment.SavedFragment;
-import ua.notky.notes.gui.widgets.ProgressBarDialog;
-import ua.notky.notes.gui.listener.FirstLaunch;
+import ua.notky.notes.gui.listener.LoadingData;
 import ua.notky.notes.gui.listener.HostActivity;
 import ua.notky.notes.gui.listener.OnChangeTextListener;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
 import ua.notky.notes.gui.listener.OnSelectItemToEditListener;
-import ua.notky.notes.data.service.NoteService;
-import ua.notky.notes.data.service.NoteServiceImp;
-import ua.notky.notes.api.tasks.FirstLoadTask;
-import ua.notky.notes.util.PreferencesConstant;
-import ua.notky.notes.util.enums.LaunchState;
-import ua.notky.notes.util.enums.Mode;
+import ua.notky.notes.api.tasks.LoadTask;
+import ua.notky.notes.gui.recycler.NoteAdapter;
+import ua.notky.notes.util.Constant;
+import ua.notky.notes.util.enums.LoadDataMode;
+import ua.notky.notes.util.enums.LoadDataState;
+import ua.notky.notes.util.enums.AppMode;
 import ua.notky.notes.util.enums.TextState;
 
 import android.content.Context;
@@ -31,15 +31,15 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import static ua.notky.notes.util.DefaultDataUtil.getDefaulData;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSelectItemToEditListener,
-        OnChangeTextListener, HostActivity, FirstLaunch {
+        OnChangeTextListener, HostActivity, LoadingData {
     private SharedPreferences preferences;
     private LinearLayout progressBarView;
-    private ProgressBarDialog progressBarDialog;
+    private LoadTask loadTask;
+    private LoadDataMode loadDataMode;
     private SavedFragment savedFragment;
     private OnSaveToolbarButtonListener onSaveToolbarButtonListener;
+    private NoteAdapter adapter;
     private Button backBtn;
     private Button saveBtn;
     private TextView searchView;
@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         preferences = getPreferences(MODE_PRIVATE);
         progressBarView = findViewById(R.id.progressbar_view);
-        loadData(savedInstanceState);
-
+        adapter = new NoteAdapter();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         backBtn = toolbar.findViewById(R.id.back_toolbar_btn);
@@ -62,23 +61,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView = toolbar.findViewById(R.id.search_toolbar_view);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        startMode(Mode.NORMAL);
+        startMode(AppMode.NORMAL);
 
-        NoteService noteService = new NoteServiceImp(this);
-
-        if(noteService.getAll().size() == 0) {
-            noteService.saveAll(getDefaulData());
-        }
+        loadData(savedInstanceState);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startMode(Mode.NORMAL);
+        startMode(AppMode.NORMAL);
     }
 
-    private void startMode(Mode startMode){
-        switch (startMode) {
+    private void startMode(AppMode startAppMode){
+        switch (startAppMode) {
             case NORMAL:
                 searchView.setVisibility(View.VISIBLE);
                 backBtn.setVisibility(View.INVISIBLE);
@@ -98,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onSelectItemToEdit() {
-        startMode(Mode.EDIT);
+        startMode(AppMode.EDIT);
     }
 
     @Override
@@ -115,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void changedText(TextState textState) {
         switch (textState){
             case CURRENT:
-                startMode(Mode.EDIT);
+                startMode(AppMode.EDIT);
                 break;
             case CHANGED:
-                startMode(Mode.SAVE);
+                startMode(AppMode.SAVE);
                 break;
         }
     }
@@ -126,6 +121,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void setSaveToolbarListener(OnSaveToolbarButtonListener onSaveToolbarButtonListener) {
         this.onSaveToolbarButtonListener = onSaveToolbarButtonListener;
+    }
+
+    @Override
+    public NoteAdapter getAdapter() {
+        return adapter;
     }
 
     private void onBackToolbar(){
@@ -138,67 +138,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onSaveToolbar(){
         onSaveToolbarButtonListener.onSave();
-        startMode(Mode.EDIT);
+        startMode(AppMode.EDIT);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean(PreferencesConstant.LOADING_DATA, true);
-        outState.putInt(PreferencesConstant.VISIBLE_VIEW, progressBarView.getVisibility());
-        System.out.println("onSaveInstanceState: " + progressBarView.getVisibility());
-        progressBarView.setVisibility(View.INVISIBLE);
-        System.out.println("Hash onSaveInstanceState: " + progressBarView.hashCode());
-        System.out.println("Hash onSaveInstanceState Activity: " + this.hashCode());
+        outState.putBoolean(Constant.LOADING_DATA, true);
+        outState.putInt(Constant.VISIBLE_VIEW, progressBarView.getVisibility());
+        outState.putString(Constant.LOAD_MODE, loadDataMode.toString());
+
+        savedFragment = new SavedFragment();
+        savedFragment.setLoadTask(loadTask);
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction()
+                .add(savedFragment, Constant.PROGRESS_TAG)
+                .commit();
+
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        if(savedInstanceState != null){
-            System.out.println("Is not null");
-            System.out.println("Bundle: " + savedInstanceState.getInt(PreferencesConstant.VISIBLE_VIEW));
-            progressBarView.setVisibility(savedInstanceState.getInt(PreferencesConstant.VISIBLE_VIEW));
-        } else {
-            progressBarView.setVisibility(View.INVISIBLE);
+        progressBarView.setVisibility(savedInstanceState.getInt(Constant.VISIBLE_VIEW));
+        loadDataMode = LoadDataMode.valueOf(savedInstanceState.getString(Constant.LOAD_MODE));
+
+        FragmentManager manager = getSupportFragmentManager();
+        savedFragment = (SavedFragment) manager.findFragmentByTag(Constant.PROGRESS_TAG);
+        if(savedFragment != null){
+            loadTask = savedFragment.getLoadTask();
+            loadTask.setLauncher(this);
         }
-        System.out.println("Hash onRestoreInstanceState: " + progressBarView.hashCode());
-        System.out.println("Hash onRestoreInstanceState Activity: " + this.hashCode());
+
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
-    public void launch(LaunchState state) {
+    protected void onDestroy() {
+        progressBarView.setVisibility(View.INVISIBLE);
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void showProgressBar(LoadDataState state) {
         switch (state) {
             case START:
-                System.out.println("Start mode");
-                progressBarView.setVisibility(View.VISIBLE);
+                startProgressBar();
                 break;
             case STOP:
-                System.out.println("Stop mode");
+                stopProgressBar();
+                break;
+        }
+    }
+
+    private void startProgressBar(){
+        switch (loadDataMode) {
+            case FIRST:
+                progressBarView.setVisibility(View.VISIBLE);
+                break;
+            case NORMAL:
+                break;
+        }
+    }
+
+    private void stopProgressBar(){
+        switch (loadDataMode) {
+            case FIRST:
                 Editor editor = preferences.edit();
-                editor.putBoolean(PreferencesConstant.FIRST_LAUNCH_APP, false);
+                editor.putBoolean(Constant.FIRST_LAUNCH_APP, false);
                 editor.apply();
                 progressBarView.setVisibility(View.INVISIBLE);
-                System.out.println("Hash STOP: " + progressBarView.hashCode());
-                System.out.println("Hash STOP Activity: " + this.hashCode());
+                break;
+            case NORMAL:
                 break;
         }
     }
 
     private void loadData(Bundle bundle){
         progressBarView.setVisibility(View.INVISIBLE);
-        System.out.println("Hash loadData: " + progressBarView.hashCode());
 
-        if(bundle == null || !bundle.getBoolean(PreferencesConstant.LOADING_DATA)){
-            if(preferences.getBoolean(PreferencesConstant.FIRST_LAUNCH_APP, true)){
-                System.out.println("First!");
-                FirstLoadTask firstLoadTask = new FirstLoadTask(this);
-                firstLoadTask.execute();
+        if(bundle == null || !bundle.getBoolean(Constant.LOADING_DATA)){
+            if(preferences.getBoolean(Constant.FIRST_LAUNCH_APP, true)){
+                loadDataMode = LoadDataMode.FIRST;
             } else {
-                System.out.println("Second!");
-                FirstLoadTask firstLoadTask = new FirstLoadTask(this);
-                firstLoadTask.execute();
+                loadDataMode = LoadDataMode.NORMAL;
             }
+            loadTask = new LoadTask(this, this);
+            loadTask.setAdapter(adapter);
+            loadTask.execute();
         }
     }
 }

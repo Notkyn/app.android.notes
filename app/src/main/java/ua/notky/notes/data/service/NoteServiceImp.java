@@ -47,7 +47,7 @@ public class NoteServiceImp implements NoteService {
     @Override
     public void saveAll(List<Note> list) {
         for(Note note : list){
-            note.setId(save(note).getId());
+            save(note);
         }
     }
 }

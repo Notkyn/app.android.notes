@@ -1,6 +1,6 @@
 package ua.notky.notes.util.enums;
 
-public enum Mode {
+public enum AppMode {
     NORMAL,
     EDIT,
     SAVE
