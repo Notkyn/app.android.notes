@@ -15,7 +15,6 @@ import ua.notky.notes.api.tasks.LoadTask;
 import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.util.Constant;
 import ua.notky.notes.util.enums.LoadDataMode;
-import ua.notky.notes.util.enums.LoadDataState;
 import ua.notky.notes.util.enums.AppMode;
 import ua.notky.notes.util.enums.TextState;
 
@@ -26,15 +25,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSelectItemToEditListener,
         OnChangeTextListener, HostActivity, LoadingData {
     private SharedPreferences preferences;
-    private LinearLayout progressBarView;
+    private RelativeLayout circleProgressBar;
+    private RelativeLayout rootView;
+    private ProgressBar horizontalProgressBar;
+    private ProgressBar progressBar;
+    private TextView connection;
     private LoadTask loadTask;
     private LoadDataMode loadDataMode;
     private SavedFragment savedFragment;
@@ -49,8 +56,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        circleProgressBar = findViewById(R.id.progressbar_view);
+        horizontalProgressBar = findViewById(R.id.horizontal_progress_bar);
+        rootView = findViewById(R.id.root_view);
+        progressBar = findViewById(R.id.progress_bar_circle);
+        connection = findViewById(R.id.not_connection);
+
         preferences = getPreferences(MODE_PRIVATE);
-        progressBarView = findViewById(R.id.progressbar_view);
         adapter = new NoteAdapter();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -144,7 +156,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(Constant.LOADING_DATA, true);
-        outState.putInt(Constant.VISIBLE_VIEW, progressBarView.getVisibility());
+        outState.putInt(Constant.VISIBLE_CIRCLE_PROGRESS_BAR, circleProgressBar.getVisibility());
+        outState.putInt(Constant.VISIBLE_HORIZONTAL_PROGRESS_BAR, horizontalProgressBar.getVisibility());
+        outState.putInt(Constant.VISIBLE_PROGRESS_BAR, progressBar.getVisibility());
+        outState.putInt(Constant.VISIBLE_CONNECTION, connection.getVisibility());
         outState.putString(Constant.LOAD_MODE, loadDataMode.toString());
 
         savedFragment = new SavedFragment();
@@ -159,7 +174,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        progressBarView.setVisibility(savedInstanceState.getInt(Constant.VISIBLE_VIEW));
+        circleProgressBar.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_CIRCLE_PROGRESS_BAR));
+        horizontalProgressBar.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_HORIZONTAL_PROGRESS_BAR));
+        progressBar.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_PROGRESS_BAR));
+        connection.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_CONNECTION));
         loadDataMode = LoadDataMode.valueOf(savedInstanceState.getString(Constant.LOAD_MODE));
 
         FragmentManager manager = getSupportFragmentManager();
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(savedFragment != null){
             loadTask = savedFragment.getLoadTask();
             loadTask.setLauncher(this);
+            loadTask.setAdapter(adapter);
         }
 
         super.onRestoreInstanceState(savedInstanceState);
@@ -174,48 +197,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        progressBarView.setVisibility(View.INVISIBLE);
+        circleProgressBar.setVisibility(View.INVISIBLE);
 
         super.onDestroy();
     }
 
     @Override
-    public void showProgressBar(LoadDataState state) {
-        switch (state) {
-            case START:
-                startProgressBar();
-                break;
-            case STOP:
-                stopProgressBar();
-                break;
+    public void setStateOnlineFirstLoad(boolean isOnline) {
+        if(isOnline){
+            progressBar.setVisibility(View.VISIBLE);
+            connection.setVisibility(View.INVISIBLE);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+            connection.setVisibility(View.VISIBLE);
         }
     }
 
-    private void startProgressBar(){
+    @Override
+    public void setStateOnlineNormalLoad(boolean showSnackBar, int progress) {
+        if(showSnackBar){
+            Snackbar snackbar = Snackbar.make(rootView, getResources().getText(R.string.not_connection), Snackbar.LENGTH_LONG);
+            snackbar.setTextColor(getResources().getColor(R.color.black));
+            snackbar.setBackgroundTint(getResources().getColor(R.color.colorPrimaryVariant));
+            snackbar.show();
+        }
+
+        horizontalProgressBar.setProgress(progress);
+    }
+
+    @Override
+    public void showProgressBar() {
         switch (loadDataMode) {
             case FIRST:
-                progressBarView.setVisibility(View.VISIBLE);
+                circleProgressBar.setVisibility(View.VISIBLE);
                 break;
             case NORMAL:
+                horizontalProgressBar.setVisibility(View.VISIBLE);
                 break;
         }
     }
 
-    private void stopProgressBar(){
+    @Override
+    public void hideProgressBar() {
         switch (loadDataMode) {
             case FIRST:
                 Editor editor = preferences.edit();
                 editor.putBoolean(Constant.FIRST_LAUNCH_APP, false);
                 editor.apply();
-                progressBarView.setVisibility(View.INVISIBLE);
+
+                circleProgressBar.setVisibility(View.INVISIBLE);
                 break;
             case NORMAL:
+                horizontalProgressBar.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
+    @Override
+    public void showEmptyResult() {
+        Toast.makeText(this, getResources().getString(R.string.not_have_data), Toast.LENGTH_SHORT)
+                .show();
+    }
+
     private void loadData(Bundle bundle){
-        progressBarView.setVisibility(View.INVISIBLE);
+        circleProgressBar.setVisibility(View.INVISIBLE);
 
         if(bundle == null || !bundle.getBoolean(Constant.LOADING_DATA)){
             if(preferences.getBoolean(Constant.FIRST_LAUNCH_APP, true)){
@@ -225,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             loadTask = new LoadTask(this, this);
             loadTask.setAdapter(adapter);
+            loadTask.setMode(loadDataMode);
             loadTask.execute();
         }
     }

@@ -23,7 +23,6 @@ import ua.notky.notes.data.model.Note;
 import ua.notky.notes.data.service.NoteService;
 import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.util.NoteUtil;
-import ua.notky.notes.util.PrintHelper;
 import ua.notky.notes.util.RecyclerUtil;
 
 import static ua.notky.notes.util.NoteUtil.DESCRIPTION;
@@ -94,7 +93,7 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
 
     private void onClickFloatingButton(){
         Note note = new Note();
-        note.setTitle("Новая заметка");
+        note.setTitle(getResources().getString(R.string.new_note));
         note.setDescription("");
         note.setDate(new Date());
         noteService.save(note);

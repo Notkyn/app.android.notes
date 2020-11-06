@@ -15,14 +15,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:contentDescription="@string/fab_text"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        style="@style/wrap_wrap"
-        android:tint="@color/colorPrimary"
-        android:backgroundTint="@color/colorSecondaryVariant"
-        app:borderWidth="0dp"
-        android:src="@android:drawable/ic_input_add"/>
+        app:borderWidth="@dimen/border_fab"
+        style="@style/fab"/>
 
 </RelativeLayout>

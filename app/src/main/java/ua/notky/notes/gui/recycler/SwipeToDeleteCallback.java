@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.data.model.Note;
 import ua.notky.notes.data.service.NoteService;
-import ua.notky.notes.util.PrintHelper;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private final NoteAdapter adapter;

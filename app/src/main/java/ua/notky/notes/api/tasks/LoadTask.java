@@ -3,6 +3,7 @@ package ua.notky.notes.api.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -12,66 +13,111 @@ import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.gui.MainActivity;
 import ua.notky.notes.gui.listener.LoadingData;
 import ua.notky.notes.gui.recycler.NoteAdapter;
-import ua.notky.notes.util.DefaultDataUtil;
 import ua.notky.notes.util.NetworkUtil;
-import ua.notky.notes.util.PrintHelper;
-import ua.notky.notes.util.enums.LoadDataState;
+import ua.notky.notes.util.enums.LoadDataMode;
 
-public class LoadTask extends AsyncTask<Void, Void, Void> {
+public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     private LoadingData launcher;
     private NoteAdapter adapter;
+    private LoadDataMode mode;
+    private boolean isOnline;
+    private boolean isSnackBar;
     private final NoteService noteService;
-    private boolean isCancel;
 
     public LoadTask(Context context, LoadingData launcher) {
         this.launcher = launcher;
         this.noteService = new NoteServiceImp(context);
+        this.isSnackBar = false;
     }
 
     public void setAdapter(NoteAdapter adapter) {
         this.adapter = adapter;
     }
 
+    public void setMode(LoadDataMode mode) {
+        this.mode = mode;
+    }
+
+    public void setLauncher(LoadingData launcher) {
+        this.launcher = launcher;
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        launcher.showProgressBar(LoadDataState.START);
+        launcher.showProgressBar();
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
-        PrintHelper.print("Start");
-
-        saveData(getData());
-
-        PrintHelper.print("Stop");
-        return null;
+    protected Integer doInBackground(Void... voids) {
+        List<Note> notes = getData();
+        saveData(notes);
+        return notes.size();
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+
+        switch (mode) {
+            case FIRST:
+                launcher.setStateOnlineFirstLoad(isOnline);
+                break;
+            case NORMAL:
+                launcher.setStateOnlineNormalLoad(isSnackBar, values[0] * 4);
+                isSnackBar = false;
+                break;
+        }
+    }
+
+    @Override
+    protected void onPostExecute(Integer integer) {
+        super.onPostExecute(integer);
         adapter.dataChanged(noteService.getAll());
-        launcher.showProgressBar(LoadDataState.STOP);
+
+        if(integer == null || integer == 0){
+            launcher.showEmptyResult();
+        }
+        launcher.hideProgressBar();
     }
 
+    /*
+        Имитация процеса  загрузки даных:
+        - проверка соединения
+        - задержка - вариант ожидания ответа запроса
+     */
     private List<Note> getData(){
-        int i = 0;
-        boolean isOnline = NetworkUtil.isOnline((MainActivity)launcher);
+        boolean changeConection = true;
+        boolean oldConnection = NetworkUtil.isOnline((MainActivity)launcher);
 
-
-        while (isOnline || i < 25){
+        for (int i = 0; i <= 25; i++){
             try {
                 TimeUnit.MILLISECONDS.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            i++;
+
             isOnline = NetworkUtil.isOnline((MainActivity)launcher);
+
+            if(oldConnection != isOnline){
+                oldConnection = isOnline;
+                changeConection = true;
+            }
+
+            if(changeConection && !isOnline){
+                changeConection = false;
+                isSnackBar = true;
+            }
+
+            if(!isOnline){
+                i = 0;
+            }
+
+            publishProgress(i);
         }
-
-
-        return DefaultDataUtil.getDefaulData();
+//        даные для примера
+//        return DefaultDataUtil.getDefaulData();
+        return new ArrayList<>();
     }
 
     private void saveData(List<Note> notes){
@@ -81,9 +127,5 @@ public class LoadTask extends AsyncTask<Void, Void, Void> {
                 noteService.save(note);
             }
         }
-    }
-
-    public void setLauncher(LoadingData launcher) {
-        this.launcher = launcher;
     }
 }

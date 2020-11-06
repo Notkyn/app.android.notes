@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="match_match">
+    <style name="text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="match_match" parent="text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
@@ -9,7 +16,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="wrap_wrap">
+    <style name="wrap_wrap" parent="text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -17,6 +24,8 @@
     <style name="main" parent="match_match">
         <item name="android:background">@color/colorPrimary</item>
     </style>
+
+
 
 
 
@@ -48,27 +57,11 @@
         <item name="android:textColor">@color/colorSecondaryVariant</item>
     </style>
 
-    <style name="edit_text" parent="match_wrap">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="layout_goneMarginTop">10dp</item>
-        <item name="android:paddingStart">5dp</item>
-        <item name="android:paddingEnd">5dp</item>
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColorHint">@color/grey</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">sans-serif</item>
-    </style>
 
-    <style name="edit_title" parent="edit_text">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
 
-    <style name="edit_description" parent="edit_text">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">italic</item>
-    </style>
+
+
+
 
     <style name="underline">
         <item name="android:layout_width">match_parent</item>
@@ -81,6 +74,53 @@
     <style name="custom_dialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="progress_bar_view" parent="match_match">
+        <item name="android:background">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="circle_progress_bar">
+        <item name="android:layout_width">@dimen/progress_bar</item>
+        <item name="android:layout_height">@dimen/progress_bar</item>
+        <item name="android:indeterminateTint">@color/colorSecondaryVariant</item>
+    </style>
+
+    <style name="not_conection" parent="wrap_wrap">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:text">@string/not_connection</item>
+    </style>
+
+    <style name="edit_input" parent="match_wrap">
+        <item name="android:layout_marginStart">@dimen/margin_editor_input</item>
+        <item name="android:layout_marginEnd">@dimen/margin_editor_input</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_editor_input</item>
+        <item name="android:paddingStart">@dimen/pading_editor_input</item>
+        <item name="android:paddingEnd">@dimen/pading_editor_input</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="edit_title" parent="edit_input">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="edit_description" parent="edit_input">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="fab" parent="wrap_wrap">
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginEnd">@dimen/margin_fab</item>
+        <item name="android:layout_marginBottom">@dimen/margin_fab</item>
+        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:backgroundTint">@color/colorSecondaryVariant</item>
+        <item name="android:src">@android:drawable/ic_input_add</item>
     </style>
 
 </resources>

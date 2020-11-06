@@ -2,4 +2,12 @@
 <resources>
     <dimen name="toolbar_btn">30dp</dimen>
     <dimen name="progress_bar">100dp</dimen>
+    <dimen name="horizontal_progress_bar">5dp</dimen>
+    <dimen name="padding_edit_fragment">20dp</dimen>
+    <dimen name="margin_top_editor_input">10dp</dimen>
+    <dimen name="margin_editor_input">20dp</dimen>
+    <dimen name="pading_editor_input">5dp</dimen>
+    <dimen name="border_fab">0dp</dimen>
+    <dimen name="margin_fab">16dp</dimen>
+    <dimen name="pading_bottom_recycler">5dp</dimen>
 </resources>

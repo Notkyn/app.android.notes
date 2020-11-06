@@ -5,4 +5,7 @@
     <string name="save">Сохранить</string>
     <string name="title_edit_hint">Введите заголовок…</string>
     <string name="description_edit_hint">Добавить описание…</string>
+    <string name="not_connection">Нет интернета</string>
+    <string name="not_have_data">Нет данных для загрузки</string>
+    <string name="new_note">Новая заметка</string>
 </resources>

@@ -1,9 +1,12 @@
 package ua.notky.notes.util;
 
 public class Constant {
-    public static final String FIRST_LAUNCH_APP = "First Launch App";
-    public static final String LOADING_DATA = "Loading Data";
-    public static final String VISIBLE_VIEW = "Visible view";
-    public static final String PROGRESS_TAG = "progress";
-    public static final String LOAD_MODE = "load mode";
+    public static final String FIRST_LAUNCH_APP = "FIRST_LAUNCH_APP";
+    public static final String LOADING_DATA = "LOADING_DATA";
+    public static final String VISIBLE_CIRCLE_PROGRESS_BAR = "VISIBLE_CIRCLE_PROGRESS_BAR";
+    public static final String VISIBLE_HORIZONTAL_PROGRESS_BAR = "VISIBLE_HORIZONTAL_PROGRESS_BAR";
+    public static final String VISIBLE_PROGRESS_BAR = "VISIBLE_PROGRESS_BAR";
+    public static final String VISIBLE_CONNECTION = "VISIBLE_CONNECTION";
+    public static final String PROGRESS_TAG = "PROGRESS_TAG";
+    public static final String LOAD_MODE = "LOAD_MODE";
 }

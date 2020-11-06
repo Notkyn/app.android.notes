@@ -1,7 +1,9 @@
 package ua.notky.notes.gui.listener;
 
-import ua.notky.notes.util.enums.LoadDataState;
-
 public interface LoadingData {
-    void showProgressBar(LoadDataState state);
+    void showProgressBar();
+    void hideProgressBar();
+    void showEmptyResult();
+    void setStateOnlineFirstLoad(boolean isOnline);
+    void setStateOnlineNormalLoad(boolean showSnackBar, int progress);
 }

@@ -9,17 +9,17 @@
         style="@style/match_match">
 
         <LinearLayout
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingTop="@dimen/padding_edit_fragment"
+            android:paddingBottom="@dimen/padding_edit_fragment"
             android:orientation="vertical"
             style="@style/match_wrap">
 
             <EditText
                 android:id="@+id/title_edit_view"
                 android:inputType="textMultiLine"
-                style="@style/edit_title"
                 android:hint="@string/title_edit_hint"
-                android:autofillHints="@string/title_edit_hint"/>
+                android:autofillHints="@string/title_edit_hint"
+                style="@style/edit_title"/>
 
             <TextView
                 style="@style/underline"/>
