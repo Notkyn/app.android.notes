@@ -13,7 +13,7 @@ public class NoteContract {
     public final static String DESCRIPTION = "description";
     public final static String DATE = "date";
 
-    public static String SQL_CREATE_TABLE = "CREATE TABLE "
+    public static final String SQL_CREATE_TABLE = "CREATE TABLE "
             + TABLE_NAME + " ("
             + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TITLE + " TEXT NOT NULL DEFAULT 0, "
@@ -22,7 +22,7 @@ public class NoteContract {
 
     public static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-    public static String[] PROJECTION = {
+    public static final String[] PROJECTION = {
             _ID,
             TITLE,
             DESCRIPTION,

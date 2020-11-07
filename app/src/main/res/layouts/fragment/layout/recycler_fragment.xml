@@ -6,7 +6,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
-        android:paddingBottom="@dimen/pading_bottom_recycler"
+        android:paddingBottom="@dimen/padding_bottom_recycler"
         style="@style/match_match"/>
 
 </LinearLayout>

@@ -2,50 +2,25 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary">
+    style="@style/toolbar">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        style="@style/match_match">
 
         <Button
             android:id="@+id/back_toolbar_btn"
-            android:background="@drawable/ic_arrow_back"
-            android:layout_width="@dimen/toolbar_btn"
-            android:layout_height="@dimen/toolbar_btn" />
+            style="@style/toolbar_arrow" />
 
         <Button
             android:id="@+id/save_toolbar_btn"
-            android:background="@drawable/save_btn"
-            android:text="@string/save"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:layout_width="120dp"
-            android:layout_height="@dimen/toolbar_btn"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"/>
+            style="@style/toolbar_save"/>
 
         <TextView
             android:id="@+id/search_toolbar_view"
-            android:layout_width="@dimen/toolbar_btn"
-            android:layout_height="@dimen/toolbar_btn"
-            android:background="@drawable/ic_search"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp" />
+            style="@style/toolbar_search"/>
     </RelativeLayout>
 
 </androidx.appcompat.widget.Toolbar>
-
-<!--
-<item
-            android:id="@+id/action_search"
-            android:title="@android:string/search_go"
-            android:icon="@drawable/icon_toolbar_search"
-            yourapp:showAsAction="always|collapseActionView"
-            yourapp:actionViewClass="android.support.v7.widget.SearchView" />
--->

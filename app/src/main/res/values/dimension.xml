@@ -6,8 +6,23 @@
     <dimen name="padding_edit_fragment">20dp</dimen>
     <dimen name="margin_top_editor_input">10dp</dimen>
     <dimen name="margin_editor_input">20dp</dimen>
-    <dimen name="pading_editor_input">5dp</dimen>
+    <dimen name="padding_editor_input">5dp</dimen>
     <dimen name="border_fab">0dp</dimen>
     <dimen name="margin_fab">16dp</dimen>
-    <dimen name="pading_bottom_recycler">5dp</dimen>
+    <dimen name="padding_bottom_recycler">5dp</dimen>
+    <dimen name="padding_horizontal_item">20dp</dimen>
+    <dimen name="padding_vertical_item">20dp</dimen>
+    <dimen name="margin_item">5dp</dimen>
+    <dimen name="margin_bottom_item">0dp</dimen>
+    <dimen name="height_underline">2dp</dimen>
+    <dimen name="margin_underline">10dp</dimen>
+    <dimen name="margin_btn">30dp</dimen>
+    <dimen name="width_save">120dp</dimen>
+
+
+
+
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_normal">14sp</dimen>
+    <dimen name="text_big">24sp</dimen>
 </resources>

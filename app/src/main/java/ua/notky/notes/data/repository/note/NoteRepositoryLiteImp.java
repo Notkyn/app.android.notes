@@ -23,7 +23,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
     }
 
     @Override
-    public Note save(Note note) {
+    public void save(Note note) {
         db = helper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -31,13 +31,9 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
         values.put(DESCRIPTION, note.getDescription());
         values.put(DATE, note.getDate().getTime());
 
-        long id = db.insert(TABLE_NAME, null, values);
+        db.insert(TABLE_NAME, null, values);
 
         db.close();
-
-        note.setId((int) id);
-
-        return note;
     }
 
     @Override
@@ -87,7 +83,7 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
     }
 
     @Override
-    public Note update(Note note) {
+    public void update(Note note) {
         db = helper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -98,8 +94,6 @@ public class NoteRepositoryLiteImp implements NoteRepositoryLite {
         db.update(TABLE_NAME, values, _ID + " = ?", new String[]{String.valueOf(note.getId())});
 
         db.close();
-
-        return note;
     }
 
     @Override

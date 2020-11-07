@@ -87,7 +87,7 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
         - задержка - вариант ожидания ответа запроса
      */
     private List<Note> getData(){
-        boolean changeConection = true;
+        boolean changeConnection = true;
         boolean oldConnection = NetworkUtil.isOnline((MainActivity)launcher);
 
         for (int i = 0; i <= 25; i++){
@@ -101,11 +101,11 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
 
             if(oldConnection != isOnline){
                 oldConnection = isOnline;
-                changeConection = true;
+                changeConnection = true;
             }
 
-            if(changeConection && !isOnline){
-                changeConection = false;
+            if(changeConnection && !isOnline){
+                changeConnection = false;
                 isSnackBar = true;
             }
 
@@ -116,7 +116,7 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
             publishProgress(i);
         }
 //        даные для примера
-//        return DefaultDataUtil.getDefaulData();
+//        return DefaultDataUtil.getDefaultData();
         return new ArrayList<>();
     }
 

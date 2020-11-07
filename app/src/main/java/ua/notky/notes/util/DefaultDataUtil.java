@@ -10,7 +10,7 @@ import java.util.Locale;
 import ua.notky.notes.data.model.Note;
 
 public class DefaultDataUtil {
-    public static List<Note> getDefaulData(){
+    public static List<Note> getDefaultData(){
         List<Note> list = new ArrayList<>();
 
         list.add(new Note("Note 1", "Description Note 1 ",

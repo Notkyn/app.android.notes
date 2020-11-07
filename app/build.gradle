@@ -41,12 +41,12 @@ android {
 
 dependencies {
     /* Version */
-    def androidX = "1.4.0-alpha01"
+    def androidX = "1.5.0-alpha04"
     def androidX_legacy = "1.0.0"
     def androidX_lifecycle = "2.2.0"
     def androidX_appcompat = "1.2.0"
     def androidX_recyclerview = "1.1.0"
-    def androidX_constraintlayout = "2.0.4"
+    def androidX_constraint_layout = "2.0.4"
     def androidX_navigation = "2.3.1"
     def material = "1.2.1"
     def junit = "4.13.1"
@@ -61,7 +61,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$androidX_lifecycle"
     implementation "androidx.appcompat:appcompat:$androidX_appcompat"
     implementation "androidx.recyclerview:recyclerview:$androidX_recyclerview"
-    implementation "androidx.constraintlayout:constraintlayout:$androidX_constraintlayout"
+    implementation "androidx.constraintlayout:constraintlayout:$androidX_constraint_layout"
     implementation "androidx.navigation:navigation-fragment:$androidX_navigation"
     implementation "androidx.navigation:navigation-ui:$androidX_navigation"
 
