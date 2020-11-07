@@ -20,12 +20,12 @@ public class NoteServiceImp implements NoteService {
 
 
     @Override
-    public void save(Note note) {
+    public Note save(Note note) {
         checkNotNull(note);
         if(note.isNew()) {
-            repository.save(note);
+            return repository.save(note);
         } else {
-            repository.update(note);
+            return repository.update(note);
         }
     }
 
