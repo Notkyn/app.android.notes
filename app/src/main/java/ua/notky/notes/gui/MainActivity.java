@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ua.notky.notes.R;
 import ua.notky.notes.gui.fragment.SavedFragment;
 import ua.notky.notes.gui.listener.LoadingData;
@@ -12,6 +16,7 @@ import ua.notky.notes.gui.listener.OnChangeTextListener;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
 import ua.notky.notes.gui.listener.OnSelectItemToEditListener;
 import ua.notky.notes.api.tasks.LoadTask;
+import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.util.Constant;
 import ua.notky.notes.util.enums.LoadDataMode;
@@ -34,46 +39,42 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnSelectItemToEditListener,
+public class MainActivity extends AppCompatActivity implements OnSelectItemToEditListener,
         OnChangeTextListener, HostActivity, LoadingData {
+    @BindView(R.id.progressbar_view) protected RelativeLayout circleProgressBar;
+    @BindView(R.id.root_view) protected RelativeLayout rootView;
+    @BindView(R.id.horizontal_progress_bar) protected ProgressBar horizontalProgressBar;
+    @BindView(R.id.progress_bar_circle) protected ProgressBar progressBar;
+    @BindView(R.id.not_connection) protected TextView connection;
+    @BindView(R.id.back_toolbar_btn) protected Button backBtn;
+    @BindView(R.id.save_toolbar_btn) protected Button saveBtn;
+    @BindView(R.id.search_toolbar_view) protected TextView searchView;
+    @BindView(R.id.toolbar) protected Toolbar toolbar;
+
     private SharedPreferences preferences;
-    private RelativeLayout circleProgressBar;
-    private RelativeLayout rootView;
-    private ProgressBar horizontalProgressBar;
-    private ProgressBar progressBar;
-    private TextView connection;
+    private SharedViewModel viewModel;
     private LoadTask loadTask;
     private LoadDataMode loadDataMode;
     private SavedFragment savedFragment;
     private OnSaveToolbarButtonListener onSaveToolbarButtonListener;
     private NoteAdapter adapter;
-    private Button backBtn;
-    private Button saveBtn;
-    private TextView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        circleProgressBar = findViewById(R.id.progressbar_view);
-        horizontalProgressBar = findViewById(R.id.horizontal_progress_bar);
-        rootView = findViewById(R.id.root_view);
-        progressBar = findViewById(R.id.progress_bar_circle);
-        connection = findViewById(R.id.not_connection);
-
-        preferences = getPreferences(MODE_PRIVATE);
-        adapter = new NoteAdapter();
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        backBtn = toolbar.findViewById(R.id.back_toolbar_btn);
-        backBtn.setOnClickListener(this);
-        saveBtn = toolbar.findViewById(R.id.save_toolbar_btn);
-        saveBtn.setOnClickListener(this);
-        searchView = toolbar.findViewById(R.id.search_toolbar_view);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         startMode(AppMode.NORMAL);
+
+        preferences = getPreferences(MODE_PRIVATE);
+        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        adapter = new NoteAdapter();
+        viewModel.setNoteAdapter(adapter);
+
+        viewModel.getTextState().observe(this, this::changedText);
 
         loadData(savedInstanceState);
     }
@@ -84,38 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startMode(AppMode.NORMAL);
     }
 
-    private void startMode(AppMode startAppMode){
-        switch (startAppMode) {
-            case NORMAL:
-                searchView.setVisibility(View.VISIBLE);
-                backBtn.setVisibility(View.INVISIBLE);
-                saveBtn.setVisibility(View.INVISIBLE);
-                break;
-            case EDIT:
-                searchView.setVisibility(View.INVISIBLE);
-                backBtn.setVisibility(View.VISIBLE);
-                saveBtn.setVisibility(View.INVISIBLE);
-                break;
-            case SAVE:
-                searchView.setVisibility(View.INVISIBLE);
-                backBtn.setVisibility(View.VISIBLE);
-                saveBtn.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onSelectItemToEdit() {
         startMode(AppMode.EDIT);
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.equals(backBtn)){
-            onBackToolbar();
-        }
-        if(view.equals(saveBtn)){
-            onSaveToolbar();
-        }
     }
 
     @Override
@@ -140,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return adapter;
     }
 
-    private void onBackToolbar(){
+    @OnClick(R.id.back_toolbar_btn)
+    protected void onBackToolbar(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(backBtn.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
@@ -148,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         onBackPressed();
     }
 
-    private void onSaveToolbar(){
+    @OnClick(R.id.save_toolbar_btn)
+    protected void onSaveToolbar(){
         onSaveToolbarButtonListener.onSave();
         startMode(AppMode.EDIT);
     }
@@ -272,6 +246,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loadTask.setAdapter(adapter);
             loadTask.setMode(loadDataMode);
             loadTask.execute();
+        }
+    }
+
+    private void startMode(AppMode startAppMode){
+        switch (startAppMode) {
+            case NORMAL:
+                searchView.setVisibility(View.VISIBLE);
+                backBtn.setVisibility(View.INVISIBLE);
+                saveBtn.setVisibility(View.INVISIBLE);
+                break;
+            case EDIT:
+                searchView.setVisibility(View.INVISIBLE);
+                backBtn.setVisibility(View.VISIBLE);
+                saveBtn.setVisibility(View.INVISIBLE);
+                break;
+            case SAVE:
+                searchView.setVisibility(View.INVISIBLE);
+                backBtn.setVisibility(View.VISIBLE);
+                saveBtn.setVisibility(View.VISIBLE);
         }
     }
 }
