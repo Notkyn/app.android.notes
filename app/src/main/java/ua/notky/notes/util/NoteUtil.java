@@ -21,4 +21,12 @@ public class NoteUtil {
         note.setDate(new Date());
         return note;
     }
+
+    public static Note getCopy(Note value){
+        Note note = new Note(value.getId());
+        note.setTitle(value.getTitle());
+        note.setDescription(value.getDescription());
+        note.setDate(value.getDate());
+        return note;
+    }
 }

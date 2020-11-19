@@ -22,6 +22,7 @@ import ua.notky.notes.data.model.Note;
 import ua.notky.notes.data.service.NoteService;
 import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.gui.model.SharedViewModel;
+import ua.notky.notes.util.NoteUtil;
 import ua.notky.notes.util.enums.TextState;
 
 public class EditorNoteFragment extends Fragment implements OnSaveToolbarButtonListener {

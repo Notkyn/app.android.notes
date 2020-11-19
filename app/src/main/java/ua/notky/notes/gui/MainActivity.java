@@ -9,6 +9,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.notky.notes.R;
+import ua.notky.notes.data.service.NoteService;
+import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.gui.fragment.SavedFragment;
 import ua.notky.notes.gui.listener.LoadingData;
 import ua.notky.notes.gui.listener.HostActivity;
@@ -37,6 +39,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements OnSelectItemToEditListener,
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnSelectItemToEdi
     private SavedFragment savedFragment;
     private OnSaveToolbarButtonListener onSaveToolbarButtonListener;
     private NoteAdapter adapter;
+    private NoteService noteService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +74,11 @@ public class MainActivity extends AppCompatActivity implements OnSelectItemToEdi
         startMode(AppMode.NORMAL);
 
         preferences = getPreferences(MODE_PRIVATE);
-        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        noteService = new NoteServiceImp(getApplicationContext());
         adapter = new NoteAdapter();
-        viewModel.setNoteAdapter(adapter);
+//        viewModel.setNoteAdapter(adapter);
 
+        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         viewModel.getTextState().observe(this, this::changedText);
 
         loadData(savedInstanceState);
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnSelectItemToEdi
     @OnClick(R.id.save_toolbar_btn)
     protected void onSaveToolbar(){
         onSaveToolbarButtonListener.onSave();
+
         startMode(AppMode.EDIT);
     }
 
