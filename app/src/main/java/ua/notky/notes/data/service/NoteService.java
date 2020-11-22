@@ -9,5 +9,6 @@ public interface NoteService {
     void delete(int id);
     Note get(int id);
     List<Note> getAll();
+    List<Note> getAllWithSortDate();
     void saveAll(List<Note> list);
 }

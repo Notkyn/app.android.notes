@@ -7,13 +7,14 @@
     style="@style/main"
     tools:context=".gui.MainActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include android:id="@+id/toolbar_include"
+        layout="@layout/toolbar"/>
 
     <ProgressBar
         android:id="@+id/horizontal_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/horizontal_progress_bar"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/toolbar_include"
         android:backgroundTint="@color/colorPrimary"
         android:foregroundTint="@color/colorSecondary"
         android:progressTint="@color/colorSecondaryVariant"

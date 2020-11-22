@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -14,10 +15,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
-import ua.notky.notes.gui.listener.HostActivity;
-import ua.notky.notes.gui.listener.OnSelectItemToEditListener;
+import ua.notky.notes.databinding.NotesFragmentBinding;
 import ua.notky.notes.gui.model.SharedViewModel;
-import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.gui.recycler.OnSelectItemRecyclerView;
 import ua.notky.notes.gui.recycler.SwipeToDeleteCallback;
 import ua.notky.notes.data.model.Note;
@@ -25,12 +24,12 @@ import ua.notky.notes.data.service.NoteService;
 import ua.notky.notes.data.service.NoteServiceImp;
 import ua.notky.notes.util.NoteUtil;
 import ua.notky.notes.util.RecyclerUtil;
+import ua.notky.notes.util.enums.AppMode;
 
 public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<Note>, View.OnClickListener {
+    private NotesFragmentBinding binding;
     private NavController navController;
-    private OnSelectItemToEditListener toEditListener;
     private NoteService noteService;
-    private NoteAdapter adapter;
     private List<Note> notes;
     private SharedViewModel viewModel;
 
@@ -40,31 +39,26 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.notes_fragment, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = NotesFragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        view.findViewById(R.id.fab).setOnClickListener(this);
+        binding.fab.setOnClickListener(this);
 
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
-        toEditListener = (OnSelectItemToEditListener) getActivity();
 
         noteService = new NoteServiceImp(view.getContext());
-        notes = noteService.getAll();
-        NoteUtil.sortWithDate(notes);
+        notes = noteService.getAllWithSortDate();
 
-        HostActivity activity = (HostActivity) getActivity();
-        if(activity != null){
-            adapter = activity.getAdapter();
-            adapter.setContext(this.getContext());
-            adapter.setList(notes);
-            adapter.setOnSelectItemRecyclerView(this);
-        }
+        viewModel.getAdapter().setContext(this.getContext());
+        viewModel.getAdapter().setList(notes);
+        viewModel.getAdapter().setOnSelectItemRecyclerView(this);
         RecyclerView recyclerView = RecyclerUtil.createRecycler(view);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(viewModel.getAdapter());
 
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, adapter, notes, noteService);
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, viewModel.getAdapter(), notes, noteService);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
@@ -73,14 +67,14 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
 
     @Override
     public void selectItem(Note note) {
-        toEditListener.onSelectItemToEdit();
+        viewModel.changeAppMode(AppMode.EDIT);
         viewModel.setNote(note);
         navController.navigate(R.id.editor_note_fragment);
     }
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.fab){
+        if(view.getId() == binding.fab.getId()){
             onClickFloatingButton();
         }
     }
@@ -90,6 +84,6 @@ public class NotesFragment extends Fragment implements OnSelectItemRecyclerView<
         noteService.save(note);
 
         notes.add(0, note);
-        adapter.notifyDataSetChanged();
+        viewModel.getAdapter().notifyDataSetChanged();
     }
 }

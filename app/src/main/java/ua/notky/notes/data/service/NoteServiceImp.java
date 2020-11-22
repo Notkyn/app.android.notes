@@ -7,6 +7,7 @@ import java.util.List;
 import ua.notky.notes.data.model.Note;
 import ua.notky.notes.data.repository.note.NoteRepositoryLite;
 import ua.notky.notes.data.repository.note.NoteRepositoryLiteImp;
+import ua.notky.notes.util.NoteUtil;
 
 import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithId;
 import static ua.notky.notes.util.ValidationUtil.checkNotNull;
@@ -42,6 +43,13 @@ public class NoteServiceImp implements NoteService {
     @Override
     public List<Note> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public List<Note> getAllWithSortDate() {
+        List<Note> list = getAll();
+        NoteUtil.sortWithDate(list);
+        return list;
     }
 
     @Override
