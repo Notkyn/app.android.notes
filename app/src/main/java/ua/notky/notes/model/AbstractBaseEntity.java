@@ -1,4 +1,4 @@
-package ua.notky.notes.data.model;
+package ua.notky.notes.model;
 
 import java.util.Objects;
 

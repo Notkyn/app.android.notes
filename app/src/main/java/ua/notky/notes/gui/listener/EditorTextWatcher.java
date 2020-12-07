@@ -3,7 +3,7 @@ package ua.notky.notes.gui.listener;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.util.enums.AppMode;
 

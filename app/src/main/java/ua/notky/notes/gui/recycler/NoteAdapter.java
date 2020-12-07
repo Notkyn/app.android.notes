@@ -7,23 +7,23 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 import ua.notky.notes.util.DateUtil;
 import ua.notky.notes.util.NoteUtil;
+import ua.notky.notes.util.dagger.AppDagger;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
-    private Context context;
     private List<Note> list;
     private OnSelectItemRecyclerView<Note> onSelectItemRecyclerView;
+    @Inject Context context;
 
     public NoteAdapter() {
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
+        AppDagger.getInstance().getComponent().injectNoteAdapter(this);
     }
 
     public void setList(List<Note> list) {

@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 
 public class DefaultDataUtil {
     public static List<Note> getDefaultData(){

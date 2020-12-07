@@ -1,6 +1,6 @@
 package ua.notky.notes.util;
 
-import ua.notky.notes.data.model.AbstractBaseEntity;
+import ua.notky.notes.model.AbstractBaseEntity;
 import ua.notky.notes.util.exception.NotFoundDataException;
 
 public class ValidationUtil {

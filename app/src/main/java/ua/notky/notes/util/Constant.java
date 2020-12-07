@@ -7,6 +7,5 @@ public class Constant {
     public static final String VISIBLE_HORIZONTAL_PROGRESS_BAR = "VISIBLE_HORIZONTAL_PROGRESS_BAR";
     public static final String VISIBLE_PROGRESS_BAR = "VISIBLE_PROGRESS_BAR";
     public static final String VISIBLE_CONNECTION = "VISIBLE_CONNECTION";
-    public static final String PROGRESS_TAG = "PROGRESS_TAG";
     public static final String LOAD_MODE = "LOAD_MODE";
 }

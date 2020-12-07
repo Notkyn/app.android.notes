@@ -1,4 +1,4 @@
-package ua.notky.notes.data.repository.note;
+package ua.notky.notes.dao.note;
 
 import android.provider.BaseColumns;
 

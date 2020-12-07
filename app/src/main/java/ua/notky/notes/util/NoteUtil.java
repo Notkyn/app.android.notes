@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import ua.notky.notes.R;
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 
 public class NoteUtil {
     public static final String TITLE = "Новая заметка";

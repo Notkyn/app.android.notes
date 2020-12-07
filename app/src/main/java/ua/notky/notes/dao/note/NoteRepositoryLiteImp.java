@@ -1,7 +1,6 @@
-package ua.notky.notes.data.repository.note;
+package ua.notky.notes.dao.note;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -9,17 +8,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ua.notky.notes.data.model.Note;
-import ua.notky.notes.data.repository.AppDBHelper;
+import javax.inject.Inject;
 
-import static ua.notky.notes.data.repository.note.NoteContract.*;
+import ua.notky.notes.model.Note;
+import ua.notky.notes.dao.AppDBHelper;
+import ua.notky.notes.util.dagger.AppDagger;
+
+import static ua.notky.notes.dao.note.NoteContract.*;
 
 public class NoteRepositoryLiteImp implements NoteRepositoryLite {
-    private final AppDBHelper helper;
+    @Inject AppDBHelper helper;
     private SQLiteDatabase db;
 
-    public NoteRepositoryLiteImp(Context context) {
-        this.helper = new AppDBHelper(context);
+    public NoteRepositoryLiteImp() {
+        AppDagger.getInstance().getComponent().injectNoteRepository(this);
     }
 
     @Override

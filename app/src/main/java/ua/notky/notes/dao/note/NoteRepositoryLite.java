@@ -1,8 +1,8 @@
-package ua.notky.notes.data.repository.note;
+package ua.notky.notes.dao.note;
 
 import java.util.List;
 
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 
 public interface NoteRepositoryLite {
     Note save(Note note);

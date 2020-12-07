@@ -1,9 +1,9 @@
-package ua.notky.notes.gui.listener;
+package ua.notky.notes.gui.presenter.main;
 
-public interface LoadingData {
+public interface MainView {
     void showProgressBar();
-    void hideProgressBar();
     void showEmptyResult();
+    void hideProgressBar();
     void setStateOnlineFirstLoad(boolean isOnline);
     void setStateOnlineNormalLoad(boolean showSnackBar, int progress);
 }

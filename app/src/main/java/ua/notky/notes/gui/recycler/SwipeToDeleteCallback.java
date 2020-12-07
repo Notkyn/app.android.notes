@@ -2,22 +2,34 @@ package ua.notky.notes.gui.recycler;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import ua.notky.notes.data.model.Note;
-import ua.notky.notes.data.service.NoteService;
+import ua.notky.notes.model.Note;
+import ua.notky.notes.service.NoteService;
+import ua.notky.notes.util.dagger.AppDagger;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-    private final NoteAdapter adapter;
-    private final List<Note> notes;
-    private final NoteService noteService;
+    private List<Note> notes;
+    private NoteAdapter adapter;
+    private NoteService noteService;
 
-    public SwipeToDeleteCallback(int dragDirs, int swipeDirs, NoteAdapter adapter, List<Note> notes, NoteService noteService) {
+    public SwipeToDeleteCallback(int dragDirs, int swipeDirs) {
         super(dragDirs, swipeDirs);
+    }
+
+    public void setAdapter(NoteAdapter adapter) {
         this.adapter = adapter;
-        this.notes = notes;
+    }
+
+    public void setNoteService(NoteService noteService) {
         this.noteService = noteService;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     @Override

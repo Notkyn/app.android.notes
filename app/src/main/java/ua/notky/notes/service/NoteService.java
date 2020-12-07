@@ -1,8 +1,8 @@
-package ua.notky.notes.data.service;
+package ua.notky.notes.service;
 
 import java.util.List;
 
-import ua.notky.notes.data.model.Note;
+import ua.notky.notes.model.Note;
 
 public interface NoteService {
     Note save(Note note);

@@ -3,14 +3,13 @@ package ua.notky.notes.gui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import ua.notky.notes.R;
 import ua.notky.notes.databinding.ActivityMainBinding;
-import ua.notky.notes.gui.listener.LoadingData;
-import ua.notky.notes.gui.listener.HostActivity;
-import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
-import ua.notky.notes.api.tasks.LoadTask;
 import ua.notky.notes.gui.model.SharedViewModel;
+import ua.notky.notes.gui.presenter.main.MainPresenter;
+import ua.notky.notes.gui.presenter.main.MainView;
 import ua.notky.notes.util.Constant;
+import ua.notky.notes.util.ViewUtil;
+import ua.notky.notes.util.dagger.AppDagger;
 import ua.notky.notes.util.enums.LoadDataMode;
 import ua.notky.notes.util.enums.AppMode;
 
@@ -20,19 +19,18 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements HostActivity, LoadingData, View.OnClickListener {
+import javax.inject.Inject;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainView {
 
     private SharedPreferences preferences;
     private SharedViewModel viewModel;
     private LoadDataMode loadDataMode;
-    private OnSaveToolbarButtonListener onSaveToolbarButtonListener;
     private ActivityMainBinding binding;
+    @Inject MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +41,17 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
         setSupportActionBar(binding.toolbarInclude.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
+        binding.toolbarInclude.backToolbarBtn.setOnClickListener(this);
+        binding.toolbarInclude.saveToolbarBtn.setOnClickListener(this);
+
         preferences = getPreferences(MODE_PRIVATE);
 
         viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         viewModel.getAppMode().observe(this, this::startMode);
         viewModel.changeAppMode(AppMode.NORMAL);
+
+        AppDagger.getInstance().getComponent().injectMainActivity(this);
+        presenter.setView(this);
 
         loadData(savedInstanceState);
     }
@@ -69,11 +73,6 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
                 binding.toolbarInclude.backToolbarBtn.setVisibility(View.VISIBLE);
                 binding.toolbarInclude.saveToolbarBtn.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void setSaveToolbarListener(OnSaveToolbarButtonListener onSaveToolbarButtonListener) {
-        this.onSaveToolbarButtonListener = onSaveToolbarButtonListener;
     }
 
     @Override
@@ -110,9 +109,6 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
                 savedInstanceState.getInt(Constant.VISIBLE_CONNECTION));
         loadDataMode = LoadDataMode.valueOf(savedInstanceState.getString(Constant.LOAD_MODE));
 
-        LoadTask loadTask = viewModel.getLoadTask();
-        loadTask.setLauncher(this);
-
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -137,10 +133,7 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
     @Override
     public void setStateOnlineNormalLoad(boolean showSnackBar, int progress) {
         if(showSnackBar){
-            Snackbar snackbar = Snackbar.make(binding.rootView, getResources().getText(R.string.not_connection), Snackbar.LENGTH_LONG);
-            snackbar.setTextColor(getResources().getColor(R.color.black));
-            snackbar.setBackgroundTint(getResources().getColor(R.color.colorPrimaryVariant));
-            snackbar.show();
+            ViewUtil.createSnackbar(binding.rootView).show();
         }
 
         binding.horizontalProgressBar.setProgress(progress);
@@ -176,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
 
     @Override
     public void showEmptyResult() {
-        Toast.makeText(this, getResources().getString(R.string.not_have_data), Toast.LENGTH_SHORT)
-                .show();
+        ViewUtil.createToast(binding.rootView).show();
     }
 
     private void loadData(Bundle bundle){
@@ -189,12 +181,8 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
             } else {
                 loadDataMode = LoadDataMode.NORMAL;
             }
-            LoadTask loadTask = new LoadTask(this, this);
-            loadTask.setAdapter(viewModel.getAdapter());
-            loadTask.setMode(loadDataMode);
-            loadTask.execute();
 
-            viewModel.setLoadTask(loadTask);
+            presenter.startLoadData(loadDataMode);
         }
     }
 
@@ -209,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements HostActivity, Loa
     }
 
     private void onSaveToolbar(){
-        onSaveToolbarButtonListener.onSave();
+        presenter.save();
 
         viewModel.changeAppMode(AppMode.EDIT);
     }
