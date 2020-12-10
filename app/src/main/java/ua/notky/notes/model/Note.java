@@ -3,20 +3,41 @@ package ua.notky.notes.model;
 import java.util.Date;
 import java.util.Objects;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+import ua.notky.notes.util.DateUtil;
+
+@Entity(tableName = "note")
 public class Note extends AbstractBaseEntity implements Comparable<Note>{
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "date")
+    @TypeConverters(value = {DateUtil.class})
     private Date date;
 
-
+    @Ignore
     public Note() {
     }
 
+    @Ignore
     public Note(Integer id) {
         super(id);
     }
 
+    @Ignore
     public Note(String title, String description, Date date) {
+        this.title = title;
+        this.description = description;
+        this.date = date;
+    }
+
+    public Note(Integer id, String title, String description, Date date) {
+        super(id);
         this.title = title;
         this.description = description;
         this.date = date;

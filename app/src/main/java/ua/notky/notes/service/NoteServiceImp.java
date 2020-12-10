@@ -4,16 +4,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ua.notky.notes.dao.AppDatabase;
+import ua.notky.notes.dao.NoteDao;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.dao.note.NoteRepositoryLite;
 import ua.notky.notes.util.NoteUtil;
 import ua.notky.notes.util.dagger.AppDagger;
 
 import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithId;
+import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithIdForDelete;
 import static ua.notky.notes.util.ValidationUtil.checkNotNull;
 
 public class NoteServiceImp implements NoteService {
-    @Inject NoteRepositoryLite repository;
+//    @Inject NoteRepositoryLite repository;
+    @Inject NoteDao repository;
 
     public NoteServiceImp() {
         AppDagger.getInstance().getComponent().injectNoteService(this);
@@ -23,15 +27,16 @@ public class NoteServiceImp implements NoteService {
     public Note save(Note note) {
         checkNotNull(note);
         if(note.isNew()) {
-            return repository.save(note);
+            note.setId((int) repository.save(note));
         } else {
-            return repository.update(note);
+            repository.update(note);
         }
+        return note;
     }
 
     @Override
-    public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+    public void delete(Note note) {
+        checkNotFoundWithIdForDelete(repository.delete(note) > 0, note.getId());
     }
 
     @Override
@@ -49,12 +54,5 @@ public class NoteServiceImp implements NoteService {
         List<Note> list = getAll();
         NoteUtil.sortWithDate(list);
         return list;
-    }
-
-    @Override
-    public void saveAll(List<Note> list) {
-        for(Note note : list){
-            save(note);
-        }
     }
 }

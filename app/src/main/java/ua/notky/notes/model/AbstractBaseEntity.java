@@ -2,7 +2,10 @@ package ua.notky.notes.model;
 
 import java.util.Objects;
 
+import androidx.room.PrimaryKey;
+
 public class AbstractBaseEntity {
+    @PrimaryKey(autoGenerate = true)
     private Integer id;
 
     public AbstractBaseEntity() {

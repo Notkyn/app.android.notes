@@ -45,26 +45,34 @@ android {
 
 dependencies {
     /* Version */
+    // AndroidX
     def androidX = "1.5.0-alpha05"
     def androidX_legacy = "1.0.0"
-    def androidX_lifecycle = "2.2.0"
     def androidX_appcompat = "1.2.0"
+    // Layout component
     def androidX_recyclerview = "1.1.0"
     def androidX_constraint_layout = "2.0.4"
-    def androidX_navigation = "2.3.1"
+    def androidX_navigation = "2.3.2"
+    // Material Design
     def material = "1.2.1"
+    // ViewModel, LiveData, Lifecycle
+    def androidX_lifecycle = "2.2.0"
+    def lifecycle_version = "2.2.0"
+    // Dagger 2
+    def dagger = "2.30.1"
+    // Room
+    def room = "2.2.5"
+    // Testing
     def junit = "4.13.1"
     def androidX_test_junit = "1.1.2"
     def androidX_test_runner = "1.3.0"
     def androidX_test_espresso = "3.3.0"
-    def lifecycle_version = "2.2.0"
-    def dagger = "2.30.1"
 
     /* AndroidX */
     implementation "androidx.core:core:$androidX"
     implementation "androidx.legacy:legacy-support-v4:$androidX_legacy"
     implementation "androidx.legacy:legacy-support-core-utils:$androidX_legacy"
-    implementation "androidx.appcompat:appcompat:${androidX_appcompat}"
+    implementation "androidx.appcompat:appcompat:$androidX_appcompat"
 
     /* Layout component */
     implementation "androidx.recyclerview:recyclerview:$androidX_recyclerview"
@@ -87,11 +95,14 @@ dependencies {
     api "com.google.dagger:dagger:$dagger"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
 
+    /* Room */
+    implementation "androidx.room:room-runtime:$room"
+    annotationProcessor "androidx.room:room-compiler:$room"
 
-    /* Material */
+    /* Material Design */
     implementation "com.google.android.material:material:$material"
 
-    /* jUnit and Testing*/
+    /* Testing*/
     testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$androidX_test_junit"
     androidTestImplementation "androidx.test:runner:$androidX_test_runner"

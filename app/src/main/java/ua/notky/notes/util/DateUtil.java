@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import androidx.room.TypeConverter;
+
 public class DateUtil {
     private static final String TIME_FORMAT = "hh:mm";
     private static final String DATE_FORMAT = "dd.MM.yyyy";
@@ -28,5 +30,15 @@ public class DateUtil {
         } else {
             return DATE_FORMAT;
         }
+    }
+
+    @TypeConverter
+    public Date toDate(Long value){
+        return new Date(value);
+    }
+
+    @TypeConverter
+    public Long fromDate(Date date){
+        return date.getTime();
     }
 }
