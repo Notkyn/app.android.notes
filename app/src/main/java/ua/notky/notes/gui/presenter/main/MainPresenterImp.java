@@ -1,7 +1,5 @@
 package ua.notky.notes.gui.presenter.main;
 
-import android.content.Context;
-
 import javax.inject.Inject;
 
 import ua.notky.notes.api.tasks.LoadTask;

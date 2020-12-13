@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
+import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.gui.recycler.SwipeToDeleteCallback;
 import ua.notky.notes.model.Note;
@@ -26,12 +27,16 @@ public class ViewUtil {
         return recyclerView;
     }
 
-    public static SwipeToDeleteCallback createSwipe(NoteService service, List<Note> notes, NoteAdapter adapter){
+    public static SwipeToDeleteCallback createSwipe(NoteService service,
+                                                    List<Note> notes,
+                                                    NoteAdapter adapter,
+                                                    AppExecutors executors){
         SwipeToDeleteCallback swipe = new SwipeToDeleteCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         swipe.setNoteService(service);
         swipe.setNotes(notes);
         swipe.setAdapter(adapter);
+        swipe.setExecutors(executors);
         return swipe;
     }
 

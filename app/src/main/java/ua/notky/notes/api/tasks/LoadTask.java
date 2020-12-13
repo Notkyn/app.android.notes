@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.gui.listener.LoadingDataListener;
@@ -26,6 +27,7 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     @Inject Context context;
     @Inject NoteAdapter adapter;
     @Inject NoteService noteService;
+    @Inject AppExecutors executors;
 
     public LoadTask() {
         this.isSnackBar = false;
@@ -72,7 +74,13 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
-        adapter.dataChanged(noteService.getAll());
+        executors.multiple().execute(() -> {
+            List<Note> list = noteService.getAll();
+
+            executors.ui().execute(() -> {
+                adapter.dataChanged(list);
+            });
+        });
 
         if(integer == null || integer == 0){
             launcher.dontLoadData();

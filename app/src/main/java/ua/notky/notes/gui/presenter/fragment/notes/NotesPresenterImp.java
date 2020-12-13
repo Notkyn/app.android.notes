@@ -3,6 +3,8 @@ package ua.notky.notes.gui.presenter.fragment.notes;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.gui.recycler.NoteAdapter;
 import ua.notky.notes.gui.recycler.OnSelectItemRecyclerView;
 import ua.notky.notes.gui.recycler.SwipeToDeleteCallback;
@@ -17,6 +19,7 @@ public class NotesPresenterImp implements NotesPresenter, OnSelectItemRecyclerVi
     private List<Note> notes;
     @Inject NoteService noteService;
     @Inject NoteAdapter adapter;
+    @Inject AppExecutors executors;
 
     public NotesPresenterImp() {
         AppDagger.getInstance().getComponent().injectNotesPresenter(this);
@@ -24,9 +27,12 @@ public class NotesPresenterImp implements NotesPresenter, OnSelectItemRecyclerVi
     }
 
     private void prepareData(){
-        notes = noteService.getAllWithSortDate();
+        executors.multiple().execute(() -> {
+            notes = noteService.getAllWithSortDate();
 
-        adapter.setList(notes);
+            adapter.setList(notes);
+        });
+
         adapter.setOnSelectItemRecyclerView(this);
     }
 
@@ -42,16 +48,20 @@ public class NotesPresenterImp implements NotesPresenter, OnSelectItemRecyclerVi
 
     @Override
     public void addDefaultNote() {
-        Note note = NoteUtil.getDefaultNote();
-        noteService.save(note);
+        executors.multiple().execute(() -> {
+            Note note = NoteUtil.getDefaultNote();
+            noteService.save(note);
 
-        notes.add(0, note);
-        adapter.notifyDataSetChanged();
+            notes.add(0, note);
+            executors.ui().execute(() -> {
+                adapter.notifyDataSetChanged();
+            });
+        });
     }
 
     @Override
     public SwipeToDeleteCallback getSwipe() {
-        return ViewUtil.createSwipe(noteService, notes, adapter);
+        return ViewUtil.createSwipe(noteService, notes, adapter, executors);
     }
 
     @Override

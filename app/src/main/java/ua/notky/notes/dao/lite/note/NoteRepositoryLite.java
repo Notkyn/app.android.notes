@@ -1,4 +1,4 @@
-package ua.notky.notes.dao.note;
+package ua.notky.notes.dao.lite.note;
 
 import java.util.List;
 

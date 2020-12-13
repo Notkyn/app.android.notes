@@ -2,12 +2,14 @@ package ua.notky.notes.gui.presenter.fragment.editornote;
 
 import javax.inject.Inject;
 
+import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.util.dagger.AppDagger;
 
 public class EditorNotePresenterImp implements EditorNotePresenter, OnSaveToolbarButtonListener {
     @Inject NoteService service;
+    @Inject AppExecutors executors;
     private EditorNoteView view;
 
     public EditorNotePresenterImp() {
@@ -21,6 +23,8 @@ public class EditorNotePresenterImp implements EditorNotePresenter, OnSaveToolba
 
     @Override
     public void onSave() {
-        service.save(view.getNoteToSave());
+        executors.multiple().execute(() -> {
+            service.save(view.getNoteToSave());
+        });
     }
 }

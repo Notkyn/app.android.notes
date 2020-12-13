@@ -4,17 +4,14 @@ import javax.inject.Singleton;
 
 import dagger.Subcomponent;
 import ua.notky.notes.api.tasks.LoadTask;
-import ua.notky.notes.dao.note.NoteRepositoryLiteImp;
+import ua.notky.notes.dao.lite.note.NoteRepositoryLiteImp;
 import ua.notky.notes.gui.MainActivity;
 import ua.notky.notes.gui.fragment.EditorNoteFragment;
 import ua.notky.notes.gui.fragment.NotesFragment;
-import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
 import ua.notky.notes.gui.presenter.fragment.editornote.EditorNotePresenterImp;
 import ua.notky.notes.gui.presenter.fragment.notes.NotesPresenterImp;
-import ua.notky.notes.gui.presenter.main.MainPresenter;
 import ua.notky.notes.gui.presenter.main.MainPresenterImp;
 import ua.notky.notes.gui.recycler.NoteAdapter;
-import ua.notky.notes.gui.recycler.SwipeToDeleteCallback;
 import ua.notky.notes.service.NoteServiceImp;
 
 @Singleton

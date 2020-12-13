@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ua.notky.notes.dao.AppDatabase;
-import ua.notky.notes.dao.NoteDao;
+import ua.notky.notes.dao.room.NoteDao;
 import ua.notky.notes.model.Note;
-import ua.notky.notes.dao.note.NoteRepositoryLite;
 import ua.notky.notes.util.NoteUtil;
 import ua.notky.notes.util.dagger.AppDagger;
 
@@ -16,7 +14,10 @@ import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithIdForDelete;
 import static ua.notky.notes.util.ValidationUtil.checkNotNull;
 
 public class NoteServiceImp implements NoteService {
+//    Using SqLite
 //    @Inject NoteRepositoryLite repository;
+
+//    Using Room
     @Inject NoteDao repository;
 
     public NoteServiceImp() {

@@ -1,4 +1,4 @@
-package ua.notky.notes.dao;
+package ua.notky.notes.dao.room;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

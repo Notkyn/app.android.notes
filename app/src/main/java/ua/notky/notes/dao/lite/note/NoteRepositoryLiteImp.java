@@ -1,4 +1,4 @@
-package ua.notky.notes.dao.note;
+package ua.notky.notes.dao.lite.note;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -11,10 +11,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ua.notky.notes.model.Note;
-import ua.notky.notes.dao.AppDBHelper;
+import ua.notky.notes.dao.lite.AppDBHelper;
 import ua.notky.notes.util.dagger.AppDagger;
 
-import static ua.notky.notes.dao.note.NoteContract.*;
+import static ua.notky.notes.dao.lite.note.NoteContract.*;
 
 public class NoteRepositoryLiteImp implements NoteRepositoryLite {
     @Inject AppDBHelper helper;

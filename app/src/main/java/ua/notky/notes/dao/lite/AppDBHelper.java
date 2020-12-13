@@ -1,11 +1,11 @@
-package ua.notky.notes.dao;
+package ua.notky.notes.dao.lite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-import ua.notky.notes.dao.note.NoteContract;
+import ua.notky.notes.dao.lite.note.NoteContract;
 
 public class AppDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "note.db";

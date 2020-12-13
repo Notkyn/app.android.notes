@@ -5,11 +5,11 @@ import android.content.Context;
 import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
-import ua.notky.notes.dao.AppDBHelper;
-import ua.notky.notes.dao.AppDatabase;
-import ua.notky.notes.dao.NoteDao;
-import ua.notky.notes.dao.note.NoteRepositoryLite;
-import ua.notky.notes.dao.note.NoteRepositoryLiteImp;
+import ua.notky.notes.dao.lite.AppDBHelper;
+import ua.notky.notes.dao.room.AppDatabase;
+import ua.notky.notes.dao.room.NoteDao;
+import ua.notky.notes.dao.lite.note.NoteRepositoryLite;
+import ua.notky.notes.dao.lite.note.NoteRepositoryLiteImp;
 import ua.notky.notes.util.dagger.scopes.DaoScope;
 
 @Module
@@ -31,8 +31,6 @@ public class DaoModule {
     public AppDatabase getDatabase(Context context){
         return Room.databaseBuilder(context,
                 AppDatabase.class, "notes")
-                //todo async
-                .allowMainThreadQueries()
                 .build();
     }
 
