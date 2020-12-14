@@ -5,7 +5,7 @@ import android.text.TextWatcher;
 
 import ua.notky.notes.model.Note;
 import ua.notky.notes.gui.model.SharedViewModel;
-import ua.notky.notes.util.enums.AppMode;
+import ua.notky.notes.tools.enums.AppMode;
 
 public class EditorTextWatcher implements TextWatcher {
     private final SharedViewModel viewModel;

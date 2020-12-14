@@ -5,8 +5,8 @@ import javax.inject.Inject;
 import ua.notky.notes.api.tasks.LoadTask;
 import ua.notky.notes.gui.listener.LoadingDataListener;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
-import ua.notky.notes.util.dagger.AppDagger;
-import ua.notky.notes.util.enums.LoadDataMode;
+import ua.notky.notes.tools.dagger.AppDagger;
+import ua.notky.notes.tools.enums.LoadDataMode;
 
 public class MainPresenterImp implements MainPresenter, LoadingDataListener {
     private MainView view;
@@ -45,7 +45,7 @@ public class MainPresenterImp implements MainPresenter, LoadingDataListener {
     }
 
     @Override
-    public void dontLoadData() {
+    public void emptyLoadData() {
         view.showEmptyResult();
     }
 

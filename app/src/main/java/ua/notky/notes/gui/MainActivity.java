@@ -7,11 +7,11 @@ import ua.notky.notes.databinding.ActivityMainBinding;
 import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.gui.presenter.main.MainPresenter;
 import ua.notky.notes.gui.presenter.main.MainView;
-import ua.notky.notes.util.Constant;
-import ua.notky.notes.util.ViewUtil;
-import ua.notky.notes.util.dagger.AppDagger;
-import ua.notky.notes.util.enums.LoadDataMode;
-import ua.notky.notes.util.enums.AppMode;
+import ua.notky.notes.tools.Constant;
+import ua.notky.notes.tools.utils.ViewUtil;
+import ua.notky.notes.tools.dagger.AppDagger;
+import ua.notky.notes.tools.enums.LoadDataMode;
+import ua.notky.notes.tools.enums.AppMode;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void setStateOnlineNormalLoad(boolean showSnackBar, int progress) {
         if(showSnackBar){
-            ViewUtil.createSnackbar(binding.rootView).show();
+            ViewUtil.createSnackBar(binding.rootView).show();
         }
 
         binding.horizontalProgressBar.setProgress(progress);

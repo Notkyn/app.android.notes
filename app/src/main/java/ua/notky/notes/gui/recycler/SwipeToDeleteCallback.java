@@ -2,18 +2,16 @@ package ua.notky.notes.gui.recycler;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.service.NoteService;
-import ua.notky.notes.util.dagger.AppDagger;
+import ua.notky.notes.tools.utils.AdapterUtil;
+import ua.notky.notes.tools.utils.NoteUtil;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-    private List<Note> notes;
     private NoteAdapter adapter;
     private NoteService noteService;
     private AppExecutors executors;
@@ -30,10 +28,6 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         this.noteService = noteService;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
-
     public void setExecutors(AppExecutors executors) {
         this.executors = executors;
     }
@@ -45,15 +39,14 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        int position = viewHolder.getAdapterPosition();
-//        noteService.delete(notes.get(position).getId());
         executors.multiple().execute(() -> {
-            noteService.delete(notes.get(position));
-            notes.remove(position);
+            int position = viewHolder.getAdapterPosition();
+            noteService.delete(adapter.getList().get(position));
 
-            executors.ui().execute(() -> {
-                adapter.notifyDataSetChanged();
-            });
+            List<Note> newList = noteService.getAll();
+            NoteUtil.sortWithDate(newList);
+
+            executors.ui().execute(() -> AdapterUtil.update(adapter, newList));
         });
     }
 }

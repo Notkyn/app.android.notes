@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import ua.notky.notes.api.AppExecutors;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
 import ua.notky.notes.service.NoteService;
-import ua.notky.notes.util.dagger.AppDagger;
+import ua.notky.notes.tools.dagger.AppDagger;
 
 public class EditorNotePresenterImp implements EditorNotePresenter, OnSaveToolbarButtonListener {
     @Inject NoteService service;
@@ -23,8 +23,6 @@ public class EditorNotePresenterImp implements EditorNotePresenter, OnSaveToolba
 
     @Override
     public void onSave() {
-        executors.multiple().execute(() -> {
-            service.save(view.getNoteToSave());
-        });
+        executors.multiple().execute(() -> service.save(view.getNoteToSave()));
     }
 }

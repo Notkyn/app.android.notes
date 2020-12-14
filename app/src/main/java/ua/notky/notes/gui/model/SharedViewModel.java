@@ -3,7 +3,7 @@ package ua.notky.notes.gui.model;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ua.notky.notes.model.Note;
-import ua.notky.notes.util.enums.AppMode;
+import ua.notky.notes.tools.enums.AppMode;
 
 public class SharedViewModel extends ViewModel {
     private Note note;

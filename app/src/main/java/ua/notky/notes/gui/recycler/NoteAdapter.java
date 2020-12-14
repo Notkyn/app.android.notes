@@ -13,9 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
 import ua.notky.notes.model.Note;
-import ua.notky.notes.util.DateUtil;
-import ua.notky.notes.util.NoteUtil;
-import ua.notky.notes.util.dagger.AppDagger;
+import ua.notky.notes.tools.utils.DateUtil;
+import ua.notky.notes.tools.dagger.AppDagger;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     private List<Note> list;
@@ -28,6 +27,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     public void setList(List<Note> list) {
         this.list = list;
+    }
+
+    public List<Note> getList() {
+        return list;
     }
 
     public void setOnSelectItemRecyclerView(OnSelectItemRecyclerView<Note> onSelectItemRecyclerView) {
@@ -57,12 +60,5 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public void dataChanged( List<Note> notes){
-        list.clear();
-        list.addAll(notes);
-        NoteUtil.sortWithDate(list);
-        notifyDataSetChanged();
     }
 }

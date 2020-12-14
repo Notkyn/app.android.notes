@@ -6,12 +6,12 @@ import javax.inject.Inject;
 
 import ua.notky.notes.dao.room.NoteDao;
 import ua.notky.notes.model.Note;
-import ua.notky.notes.util.NoteUtil;
-import ua.notky.notes.util.dagger.AppDagger;
+import ua.notky.notes.tools.utils.NoteUtil;
+import ua.notky.notes.tools.dagger.AppDagger;
 
-import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithId;
-import static ua.notky.notes.util.ValidationUtil.checkNotFoundWithIdForDelete;
-import static ua.notky.notes.util.ValidationUtil.checkNotNull;
+import static ua.notky.notes.tools.utils.ValidationUtil.checkNotFoundWithId;
+import static ua.notky.notes.tools.utils.ValidationUtil.checkNotFoundWithIdForDelete;
+import static ua.notky.notes.tools.utils.ValidationUtil.checkNotNull;
 
 public class NoteServiceImp implements NoteService {
 //    Using SqLite

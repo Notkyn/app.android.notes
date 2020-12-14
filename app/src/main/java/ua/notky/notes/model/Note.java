@@ -6,9 +6,8 @@ import java.util.Objects;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
-import ua.notky.notes.util.DateUtil;
+import ua.notky.notes.tools.utils.DateUtil;
 
 @Entity(tableName = "note")
 public class Note extends AbstractBaseEntity implements Comparable<Note>{

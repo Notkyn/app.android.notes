@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 /* Клас для создание потоков */
 public class AppExecutors{
-    private static final int THRED_POOL = 3;
+    private static final int THREAD_POOL = 3;
 
     // Один поток
     private final Executor single;
@@ -26,7 +26,7 @@ public class AppExecutors{
     }
 
     public AppExecutors() {
-        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(THRED_POOL),
+        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(THREAD_POOL),
                 new UiThreadExecutor());
     }
 

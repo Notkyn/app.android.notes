@@ -18,7 +18,7 @@ import ua.notky.notes.gui.presenter.fragment.editornote.EditorNotePresenter;
 import ua.notky.notes.gui.presenter.fragment.editornote.EditorNoteView;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.gui.model.SharedViewModel;
-import ua.notky.notes.util.dagger.AppDagger;
+import ua.notky.notes.tools.dagger.AppDagger;
 
 public class EditorNoteFragment extends Fragment implements EditorNoteView {
     private EditorNoteFragmentBinding binding;

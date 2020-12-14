@@ -20,9 +20,9 @@ import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.gui.presenter.fragment.notes.NotesPresenter;
 import ua.notky.notes.gui.presenter.fragment.notes.NotesView;
 import ua.notky.notes.model.Note;
-import ua.notky.notes.util.ViewUtil;
-import ua.notky.notes.util.dagger.AppDagger;
-import ua.notky.notes.util.enums.AppMode;
+import ua.notky.notes.tools.utils.ViewUtil;
+import ua.notky.notes.tools.dagger.AppDagger;
+import ua.notky.notes.tools.enums.AppMode;
 
 public class NotesFragment extends Fragment implements View.OnClickListener, NotesView {
     private NotesFragmentBinding binding;

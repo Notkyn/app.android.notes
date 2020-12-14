@@ -1,6 +1,6 @@
 package ua.notky.notes.gui.presenter.main;
 
-import ua.notky.notes.util.enums.LoadDataMode;
+import ua.notky.notes.tools.enums.LoadDataMode;
 
 public interface MainPresenter {
     void save();

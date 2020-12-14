@@ -14,9 +14,11 @@ import ua.notky.notes.model.Note;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.gui.listener.LoadingDataListener;
 import ua.notky.notes.gui.recycler.NoteAdapter;
-import ua.notky.notes.util.NetworkUtil;
-import ua.notky.notes.util.dagger.AppDagger;
-import ua.notky.notes.util.enums.LoadDataMode;
+import ua.notky.notes.tools.utils.AdapterUtil;
+import ua.notky.notes.tools.utils.NetworkUtil;
+import ua.notky.notes.tools.dagger.AppDagger;
+import ua.notky.notes.tools.enums.LoadDataMode;
+import ua.notky.notes.tools.utils.NoteUtil;
 
 public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     private LoadingDataListener launcher;
@@ -76,14 +78,16 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
         super.onPostExecute(integer);
         executors.multiple().execute(() -> {
             List<Note> list = noteService.getAll();
+            list.addAll(adapter.getList());
+            NoteUtil.sortWithDate(list);
 
             executors.ui().execute(() -> {
-                adapter.dataChanged(list);
+                AdapterUtil.update(adapter, list);
             });
         });
 
         if(integer == null || integer == 0){
-            launcher.dontLoadData();
+            launcher.emptyLoadData();
         }
         launcher.finishLoad();
     }
@@ -122,8 +126,6 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
 
             publishProgress(i);
         }
-//        даные для примера
-//        return DefaultDataUtil.getDefaultData();
         return new ArrayList<>();
     }
 
