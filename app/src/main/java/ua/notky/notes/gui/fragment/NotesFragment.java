@@ -19,12 +19,14 @@ import ua.notky.notes.databinding.NotesFragmentBinding;
 import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.gui.presenter.fragment.notes.NotesPresenter;
 import ua.notky.notes.gui.presenter.fragment.notes.NotesView;
+import ua.notky.notes.gui.recycler.OnSelectItemRecyclerView;
 import ua.notky.notes.model.Note;
+import ua.notky.notes.tools.utils.AdapterUtil;
 import ua.notky.notes.tools.utils.ViewUtil;
 import ua.notky.notes.tools.dagger.AppDagger;
 import ua.notky.notes.tools.enums.AppMode;
 
-public class NotesFragment extends Fragment implements View.OnClickListener, NotesView {
+public class NotesFragment extends Fragment implements View.OnClickListener, NotesView, OnSelectItemRecyclerView<Note> {
     private NotesFragmentBinding binding;
     private NavController navController;
     private SharedViewModel viewModel;
@@ -48,8 +50,11 @@ public class NotesFragment extends Fragment implements View.OnClickListener, Not
         AppDagger.getInstance().getComponent().injectNotesFragment(this);
         presenter.setView(this);
 
+        presenter.getPageAdapter().setOnSelectItemRecyclerView(this);
+        AdapterUtil.getLivePageList().observe(getViewLifecycleOwner(), notes -> presenter.getPageAdapter().submitList(notes));
+
         RecyclerView recyclerView = ViewUtil.createRecycler(view);
-        recyclerView.setAdapter(presenter.getAdapter());
+        recyclerView.setAdapter(presenter.getPageAdapter());
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(presenter.getSwipe());
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -61,6 +66,7 @@ public class NotesFragment extends Fragment implements View.OnClickListener, Not
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        presenter.setView(null);
     }
 
     @Override
@@ -75,7 +81,7 @@ public class NotesFragment extends Fragment implements View.OnClickListener, Not
     }
 
     @Override
-    public void navigateToEditor(Note note) {
+    public void selectItem(Note note) {
         viewModel.changeAppMode(AppMode.EDIT);
         viewModel.setNote(note);
         navController.navigate(R.id.editor_note_fragment);

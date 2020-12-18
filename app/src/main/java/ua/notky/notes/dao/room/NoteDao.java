@@ -2,6 +2,7 @@ package ua.notky.notes.dao.room;
 
 import java.util.List;
 
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -26,4 +27,7 @@ public interface NoteDao {
 
     @Query(value = "SELECT * FROM note WHERE id = :id")
     Note get(int id);
+
+    @Query("SELECT * FROM note ORDER BY note.date DESC")
+    DataSource.Factory<Integer, Note> getFactoryNotes();
 }

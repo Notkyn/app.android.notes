@@ -1,6 +1,5 @@
 package ua.notky.notes.api.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
@@ -10,30 +9,25 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import ua.notky.notes.api.AppExecutors;
+import ua.notky.notes.gui.recycler.NotePagedAdapter;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.service.NoteService;
 import ua.notky.notes.gui.listener.LoadingDataListener;
-import ua.notky.notes.gui.recycler.NoteAdapter;
-import ua.notky.notes.tools.utils.AdapterUtil;
 import ua.notky.notes.tools.utils.NetworkUtil;
 import ua.notky.notes.tools.dagger.AppDagger;
 import ua.notky.notes.tools.enums.LoadDataMode;
-import ua.notky.notes.tools.utils.NoteUtil;
 
 public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     private LoadingDataListener launcher;
     private LoadDataMode mode;
     private boolean isOnline;
     private boolean isSnackBar;
-    //todo context?
-    @Inject Context context;
-    @Inject NoteAdapter adapter;
+    @Inject NotePagedAdapter pagedAdapter;
     @Inject NoteService noteService;
     @Inject AppExecutors executors;
 
     public LoadTask() {
         this.isSnackBar = false;
-
         AppDagger.getInstance().getComponent().injectLoadTask(this);
     }
 
@@ -76,16 +70,6 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
-        executors.multiple().execute(() -> {
-            List<Note> list = noteService.getAll();
-            list.addAll(adapter.getList());
-            NoteUtil.sortWithDate(list);
-
-            executors.ui().execute(() -> {
-                AdapterUtil.update(adapter, list);
-            });
-        });
-
         if(integer == null || integer == 0){
             launcher.emptyLoadData();
         }
@@ -99,7 +83,7 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
      */
     private List<Note> getData(){
         boolean changeConnection = true;
-        boolean oldConnection = NetworkUtil.isOnline(context);
+        boolean oldConnection = NetworkUtil.isOnline();
 
         for (int i = 0; i <= 25; i++){
             try {
@@ -108,7 +92,7 @@ public class LoadTask extends AsyncTask<Void, Integer, Integer> {
                 e.printStackTrace();
             }
 
-            isOnline = NetworkUtil.isOnline(context);
+            isOnline = NetworkUtil.isOnline();
 
             if(oldConnection != isOnline){
                 oldConnection = isOnline;

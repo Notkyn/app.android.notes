@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ua.notky.notes.R;
-import ua.notky.notes.api.AppExecutors;
-import ua.notky.notes.gui.recycler.NoteAdapter;
+import ua.notky.notes.gui.presenter.fragment.notes.NotesPresenter;
 import ua.notky.notes.gui.recycler.SwipeToDeleteCallback;
-import ua.notky.notes.service.NoteService;
 
 public class ViewUtil {
     private ViewUtil() {
@@ -24,15 +22,9 @@ public class ViewUtil {
         return recyclerView;
     }
 
-    public static SwipeToDeleteCallback createSwipe(NoteService service,
-                                                    NoteAdapter adapter,
-                                                    AppExecutors executors){
-        SwipeToDeleteCallback swipe = new SwipeToDeleteCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        swipe.setNoteService(service);
-        swipe.setAdapter(adapter);
-        swipe.setExecutors(executors);
-        return swipe;
+    public static SwipeToDeleteCallback createSwipe(NotesPresenter presenter){
+        return new SwipeToDeleteCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, presenter);
     }
 
     public static Snackbar createSnackBar(View view){

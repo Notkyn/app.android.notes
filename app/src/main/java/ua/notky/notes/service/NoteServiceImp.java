@@ -1,9 +1,11 @@
 package ua.notky.notes.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.paging.DataSource;
 import ua.notky.notes.dao.room.NoteDao;
 import ua.notky.notes.model.Note;
 import ua.notky.notes.tools.utils.NoteUtil;
@@ -51,9 +53,7 @@ public class NoteServiceImp implements NoteService {
     }
 
     @Override
-    public List<Note> getAllWithSortDate() {
-        List<Note> list = getAll();
-        NoteUtil.sortWithDate(list);
-        return list;
+    public DataSource.Factory<Integer, Note> getFactoryDataSource() {
+        return repository.getFactoryNotes();
     }
 }

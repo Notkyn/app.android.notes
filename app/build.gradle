@@ -61,7 +61,9 @@ dependencies {
     // Dagger 2
     def dagger = "2.30.1"
     // Room
-    def room = "2.2.5"
+    def room = "2.2.6"
+    // Paging Library
+    def paging = "2.1.2"
     // Testing
     def junit = "4.13.1"
     def androidX_test_junit = "1.1.2"
@@ -98,6 +100,9 @@ dependencies {
     /* Room */
     implementation "androidx.room:room-runtime:$room"
     annotationProcessor "androidx.room:room-compiler:$room"
+
+    /* Paging Library */
+    implementation "androidx.paging:paging-runtime:$paging"
 
     /* Material Design */
     implementation "com.google.android.material:material:$material"
