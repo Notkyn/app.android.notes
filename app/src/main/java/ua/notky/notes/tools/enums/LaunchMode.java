@@ -1,6 +1,6 @@
 package ua.notky.notes.tools.enums;
 
-public enum LoadDataMode {
+public enum LaunchMode {
     FIRST,
     NORMAL
 }

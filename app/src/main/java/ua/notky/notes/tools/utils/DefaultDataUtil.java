@@ -38,13 +38,13 @@ public class DefaultDataUtil {
         return temp;
     }
 
-    private static List<Note> generateList(){
+    public static List<Note> generateList(){
         List<Note> list = new ArrayList<>();
 
-        for(int i = 1; i < 100; i++){
+        for(int i = 1; i < 3; i++){
 
             Note note = new Note();
-            note.setId(i);
+//            note.setId(i);
             note.setTitle("Note " + i);
             note.setDate(new Date());
             note.setDescription("Description " + i);

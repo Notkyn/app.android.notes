@@ -8,14 +8,13 @@ import ua.notky.notes.gui.model.SharedViewModel;
 import ua.notky.notes.gui.presenter.main.MainPresenter;
 import ua.notky.notes.gui.presenter.main.MainView;
 import ua.notky.notes.tools.Constant;
-import ua.notky.notes.tools.utils.ViewUtil;
 import ua.notky.notes.tools.dagger.AppDagger;
-import ua.notky.notes.tools.enums.LoadDataMode;
+import ua.notky.notes.tools.enums.LaunchMode;
 import ua.notky.notes.tools.enums.AppMode;
+import ua.notky.notes.tools.utils.ViewUtil;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private SharedPreferences preferences;
     private SharedViewModel viewModel;
-    private LoadDataMode loadDataMode;
+    private LaunchMode launchMode;
     private ActivityMainBinding binding;
     @Inject MainPresenter presenter;
 
@@ -53,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppDagger.getInstance().getComponent().injectMainActivity(this);
         presenter.setView(this);
 
-        loadData(savedInstanceState);
+        setLaunchMode();
+        presenter.startLoadData();
     }
 
     private void startMode(AppMode startAppMode){
@@ -72,6 +72,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 binding.toolbarInclude.searchToolbarView.setVisibility(View.INVISIBLE);
                 binding.toolbarInclude.backToolbarBtn.setVisibility(View.VISIBLE);
                 binding.toolbarInclude.saveToolbarBtn.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void setLaunchMode(){
+        if(preferences.getBoolean(Constant.FIRST_LAUNCH_APP, true)){
+            launchMode = LaunchMode.FIRST;
+            binding.viewProgressbarFirstLaunch.setVisibility(View.VISIBLE);
+            binding.progressBarFirstLaunch.setVisibility(View.VISIBLE);
+            binding.infoFirstLaunch.setVisibility(View.INVISIBLE);
+        } else {
+            launchMode = LaunchMode.NORMAL;
+            binding.viewProgressbarFirstLaunch.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void showProgressBar() {
+        switch (launchMode) {
+            case FIRST:
+                binding.viewProgressbarFirstLaunch.setVisibility(View.VISIBLE);
+                binding.progressBarFirstLaunch.setVisibility(View.VISIBLE);
+                binding.infoFirstLaunch.setVisibility(View.INVISIBLE);
+                break;
+            case NORMAL:
+                binding.progressBarNormalLaunch.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    public void hideProgressBar() {
+        switch (launchMode) {
+            case FIRST:
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(Constant.FIRST_LAUNCH_APP, false);
+                editor.apply();
+
+                binding.viewProgressbarFirstLaunch.setVisibility(View.INVISIBLE);
+                launchMode = LaunchMode.NORMAL;
+                break;
+            case NORMAL:
+                binding.progressBarNormalLaunch.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    public void showEmptyResult() {
+        if(launchMode == LaunchMode.NORMAL){
+            ViewUtil.createToast(binding.rootView).show();
+        }
+    }
+
+    @Override
+    public void setProgressValue(int value) {
+        if(launchMode == LaunchMode.NORMAL){
+            binding.progressBarNormalLaunch.setProgress(value);
+        }
+    }
+
+    @Override
+    public void showNotConnection() {
+        switch (launchMode){
+            case FIRST:
+                binding.progressBarFirstLaunch.setVisibility(View.INVISIBLE);
+                binding.infoFirstLaunch.setVisibility(View.VISIBLE);
+                break;
+            case NORMAL:
+                ViewUtil.createSnackBar(binding.rootView).show();
+                break;
         }
     }
 
@@ -79,111 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         super.onBackPressed();
         viewModel.changeAppMode(AppMode.NORMAL);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean(Constant.LOADING_DATA, true);
-        outState.putInt(Constant.VISIBLE_CIRCLE_PROGRESS_BAR,
-                binding.progressBarCircle.getVisibility());
-        outState.putInt(Constant.VISIBLE_HORIZONTAL_PROGRESS_BAR,
-                binding.horizontalProgressBar.getVisibility());
-        outState.putInt(Constant.VISIBLE_PROGRESS_BAR,
-                binding.progressbarView.getVisibility());
-        outState.putInt(Constant.VISIBLE_CONNECTION,
-                binding.notConnection.getVisibility());
-        outState.putString(Constant.LOAD_MODE, loadDataMode.toString());
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        binding.progressBarCircle.setVisibility(
-                savedInstanceState.getInt(Constant.VISIBLE_CIRCLE_PROGRESS_BAR));
-        binding.horizontalProgressBar.setVisibility(
-                savedInstanceState.getInt(Constant.VISIBLE_HORIZONTAL_PROGRESS_BAR));
-        binding.progressbarView.setVisibility(
-                savedInstanceState.getInt(Constant.VISIBLE_PROGRESS_BAR));
-        binding.notConnection.setVisibility(
-                savedInstanceState.getInt(Constant.VISIBLE_CONNECTION));
-        loadDataMode = LoadDataMode.valueOf(savedInstanceState.getString(Constant.LOAD_MODE));
-
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        binding.progressBarCircle.setVisibility(View.INVISIBLE);
-
-        super.onDestroy();
-    }
-
-    @Override
-    public void setStateOnlineFirstLoad(boolean isOnline) {
-        if(isOnline){
-            binding.progressbarView.setVisibility(View.VISIBLE);
-            binding.notConnection.setVisibility(View.INVISIBLE);
-        } else {
-            binding.progressBarCircle.setVisibility(View.INVISIBLE);
-            binding.progressbarView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void setStateOnlineNormalLoad(boolean showSnackBar, int progress) {
-        if(showSnackBar){
-            ViewUtil.createSnackBar(binding.rootView).show();
-        }
-
-        binding.horizontalProgressBar.setProgress(progress);
-    }
-
-    @Override
-    public void showProgressBar() {
-        switch (loadDataMode) {
-            case FIRST:
-                binding.progressBarCircle.setVisibility(View.VISIBLE);
-                break;
-            case NORMAL:
-                binding.horizontalProgressBar.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    @Override
-    public void hideProgressBar() {
-        switch (loadDataMode) {
-            case FIRST:
-                Editor editor = preferences.edit();
-                editor.putBoolean(Constant.FIRST_LAUNCH_APP, false);
-                editor.apply();
-
-                binding.progressBarCircle.setVisibility(View.INVISIBLE);
-                break;
-            case NORMAL:
-                binding.horizontalProgressBar.setVisibility(View.INVISIBLE);
-                break;
-        }
-    }
-
-    @Override
-    public void showEmptyResult() {
-        ViewUtil.createToast(binding.rootView).show();
-    }
-
-    private void loadData(Bundle bundle){
-        binding.progressBarCircle.setVisibility(View.INVISIBLE);
-
-        if(bundle == null || !bundle.getBoolean(Constant.LOADING_DATA)){
-            if(preferences.getBoolean(Constant.FIRST_LAUNCH_APP, true)){
-                loadDataMode = LoadDataMode.FIRST;
-            } else {
-                loadDataMode = LoadDataMode.NORMAL;
-            }
-
-            presenter.startLoadData(loadDataMode);
-        }
     }
 
     @Override
@@ -208,5 +174,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 InputMethodManager.HIDE_NOT_ALWAYS);
 
         onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(Constant.VISIBLE_PROGRESS_BAR_FIRST_LAUNCH,
+                binding.progressBarFirstLaunch.getVisibility());
+        outState.putInt(Constant.VISIBLE_INFO_FIRST_LAUNCH,
+                binding.infoFirstLaunch.getVisibility());
+        outState.putInt(Constant.VISIBLE_PROGRESS_BAR_NORMAL_LAUNCH,
+                binding.progressBarNormalLaunch.getVisibility());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        binding.progressBarFirstLaunch.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_PROGRESS_BAR_FIRST_LAUNCH));
+        binding.infoFirstLaunch.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_INFO_FIRST_LAUNCH));
+        binding.progressBarNormalLaunch.setVisibility(
+                savedInstanceState.getInt(Constant.VISIBLE_PROGRESS_BAR_NORMAL_LAUNCH));
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

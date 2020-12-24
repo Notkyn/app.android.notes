@@ -64,6 +64,8 @@ dependencies {
     def room = "2.2.6"
     // Paging Library
     def paging = "2.1.2"
+    // Woker Manager
+    def worker = "2.4.0"
     // Testing
     def junit = "4.13.1"
     def androidX_test_junit = "1.1.2"
@@ -103,6 +105,9 @@ dependencies {
 
     /* Paging Library */
     implementation "androidx.paging:paging-runtime:$paging"
+
+    /* Worker Manager */
+    implementation "androidx.work:work-runtime:$worker"
 
     /* Material Design */
     implementation "com.google.android.material:material:$material"

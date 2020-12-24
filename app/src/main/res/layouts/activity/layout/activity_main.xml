@@ -11,7 +11,7 @@
         layout="@layout/toolbar"/>
 
     <ProgressBar
-        android:id="@+id/horizontal_progress_bar"
+        android:id="@+id/progress_bar_normal_launch"
         android:layout_width="match_parent"
         android:layout_height="@dimen/horizontal_progress_bar"
         android:layout_below="@+id/toolbar_include"
@@ -26,24 +26,23 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/horizontal_progress_bar"
+        android:layout_below="@+id/progress_bar_normal_launch"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph">
     </androidx.fragment.app.FragmentContainerView>
 
 
     <RelativeLayout
-        android:id="@+id/progressbar_view"
-        android:visibility="invisible"
+        android:id="@+id/view_progressbar_first_launch"
         style="@style/progress_bar_view">
 
         <ProgressBar
-            android:id="@+id/progress_bar_circle"
+            android:id="@+id/progress_bar_first_launch"
             android:layout_centerInParent="true"
             style="@style/circle_progress_bar"/>
 
         <TextView
-            android:id="@+id/not_connection"
+            android:id="@+id/info_first_launch"
             android:layout_centerInParent="true"
             android:visibility="invisible"
             style="@style/not_connection"/>

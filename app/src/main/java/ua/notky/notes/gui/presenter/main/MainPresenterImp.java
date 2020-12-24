@@ -1,15 +1,23 @@
 package ua.notky.notes.gui.presenter.main;
 
+import android.content.Context;
+
 import javax.inject.Inject;
 
-import ua.notky.notes.api.tasks.LoadTask;
-import ua.notky.notes.gui.listener.LoadingDataListener;
+import androidx.lifecycle.LiveData;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import ua.notky.notes.gui.listener.OnSaveToolbarButtonListener;
+import ua.notky.notes.tools.Constant;
+import ua.notky.notes.tools.PrintHelper;
 import ua.notky.notes.tools.dagger.AppDagger;
-import ua.notky.notes.tools.enums.LoadDataMode;
+import ua.notky.notes.tools.utils.NetworkUtil;
 
-public class MainPresenterImp implements MainPresenter, LoadingDataListener {
+public class MainPresenterImp implements MainPresenter {
     private MainView view;
+    private boolean isLoading = false;
+    @Inject Context context;
     @Inject OnSaveToolbarButtonListener onSaveToolbarButtonListener;
 
     public MainPresenterImp() {
@@ -22,11 +30,31 @@ public class MainPresenterImp implements MainPresenter, LoadingDataListener {
     }
 
     @Override
-    public void startLoadData(LoadDataMode mode) {
-        LoadTask loadTask = new LoadTask();
-        loadTask.setLauncher(this);
-        loadTask.setMode(mode);
-        loadTask.execute();
+    public void startLoadData() {
+        if(!isLoading) {
+            if(!NetworkUtil.isOnline()){
+                view.showNotConnection();
+            }
+
+            OneTimeWorkRequest request = NetworkUtil.createRequest(NetworkUtil.createNetworkConstraints());
+            WorkManager workManager = WorkManager.getInstance(context);
+            workManager.enqueue(request);
+
+            // результат выполнение задачи
+            LiveData<WorkInfo> status = workManager.getWorkInfoByIdLiveData(request.getId());
+            // наблюдаем за процесом выполнения задачи
+            status.observeForever(workInfo -> {
+                view.setProgressValue(workInfo.getProgress().getInt(Constant.PROGRESS, 0));
+
+                stateLoading(workInfo);
+
+                if(workInfo.getState().isFinished()) {
+                    view.hideProgressBar();
+                }
+
+                isLoading = true;
+            });
+        }
     }
 
     @Override
@@ -34,28 +62,22 @@ public class MainPresenterImp implements MainPresenter, LoadingDataListener {
         this.view = view;
     }
 
-    @Override
-    public void onPreLaunch() {
-        view.showProgressBar();
-    }
-
-    @Override
-    public void finishLoad() {
-        view.hideProgressBar();
-    }
-
-    @Override
-    public void emptyLoadData() {
-        view.showEmptyResult();
-    }
-
-    @Override
-    public void isFirstLoad(boolean isOnline) {
-        view.setStateOnlineFirstLoad(isOnline);
-    }
-
-    @Override
-    public void setNormalLoad(boolean showSnackBar, int progress) {
-        view.setStateOnlineNormalLoad(showSnackBar, progress);
+    private void stateLoading(WorkInfo workInfo){
+        switch (workInfo.getState()) {
+            case ENQUEUED:
+                PrintHelper.print(isLoading);
+                if(isLoading){
+                    view.showNotConnection();
+                }
+                break;
+            case RUNNING:
+                view.showProgressBar();
+                break;
+            case SUCCEEDED:
+                if(!workInfo.getOutputData().getBoolean(Constant.IS_DATA, false)){
+                    view.showEmptyResult();
+                }
+                break;
+        }
     }
 }

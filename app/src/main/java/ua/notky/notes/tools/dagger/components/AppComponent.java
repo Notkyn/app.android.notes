@@ -4,7 +4,7 @@ import javax.inject.Singleton;
 
 import androidx.paging.DataSource;
 import dagger.Subcomponent;
-import ua.notky.notes.api.tasks.LoadTask;
+import ua.notky.notes.api.tasks.LoadingWorker;
 import ua.notky.notes.dao.lite.note.NoteRepositoryLiteImp;
 import ua.notky.notes.gui.MainActivity;
 import ua.notky.notes.gui.fragment.EditorNoteFragment;
@@ -23,7 +23,7 @@ public interface AppComponent {
     void injectNoteRepository(NoteRepositoryLiteImp repository);
     void injectNoteService(NoteServiceImp service);
 
-    void injectLoadTask(LoadTask loadTask);
+    void injectLoadingWorker(LoadingWorker worker);
 
     void injectMainActivity(MainActivity activity);
     void injectMainPresenter(MainPresenterImp presenter);
